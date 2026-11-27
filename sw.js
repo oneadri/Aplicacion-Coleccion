@@ -1,6 +1,6 @@
 // Permite instalar la app y abrirla sin conexión.
 // Siempre intenta la versión más nueva y, si no hay internet, usa la guardada.
-const CACHE = "mi-coleccion-v1";
+const CACHE = "mi-coleccion-v2";
 const SHELL = ["./", "./index.html", "./app-firebase.js", "./firebase-config.js", "./manifest.webmanifest", "./icons/icon-192.png", "./icons/icon-512.png"];
 
 self.addEventListener("install", (e) => {
