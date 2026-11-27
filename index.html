@@ -1,0 +1,1189 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Mi Colección</title>
+<meta name="description" content="K-pop, juegos, pelis y series, anime y manga en un solo sitio.">
+<meta name="theme-color" content="#0e1016">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Mi Colección">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<style>
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0;font:14px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-tap-highlight-color:transparent}
+img{max-width:100%}[hidden]{display:none!important}
+.login{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:max(24px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) max(24px,env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left));background:var(--bg,#0e1016);overflow:auto}
+.loginbox{width:100%;max-width:380px;display:flex;flex-direction:column;gap:12px;background:var(--surface,#171a23);border:1px solid var(--line,#2a2f3b);border-radius:16px;padding:26px 22px;box-shadow:var(--shadow)}
+.loginbox h1{margin:0}
+.loginsub{margin:0;color:var(--muted,#9097a9)}
+.loginbox label{display:flex;flex-direction:column;gap:4px}
+.loginacts{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+.loginacts .btn{flex:1}
+.loginmsg{margin:0;max-width:380px;text-align:center;color:var(--muted,#9097a9);min-height:1.5em}
+.loginmsg.bad{color:var(--accent,#ff4f8b);font-weight:700}
+input[type=email],input[type=password]{width:100%;background:var(--sunk);border:1px solid var(--line);border-radius:8px;padding:10px 12px;min-width:0;font:inherit;color:inherit}
+.appfoot{max-width:1180px;margin:0 auto;padding:8px max(16px,env(safe-area-inset-right)) 32px max(16px,env(safe-area-inset-left));display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;font-size:.85rem;color:var(--muted)}
+.appfoot b{color:var(--fg);font-weight:600}
+</style>
+</head>
+<body>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap">
+<style>
+/* Layout: game-launcher library — dark charcoal shell, cover art as the hero of every card, a blurred-art banner per page; each state has its own color (pink wish, green owned/done, blue playing, amber pending) */
+:root{
+  --bg:#0e1016; --surface:#171a23; --raised:#1f232e; --sunk:#12141b; --line:#2a2f3b;
+  --fg:#eef0f6; --muted:#9097a9;
+  --accent:#ff4f8b; --accent-ink:#1a0710; --accent-soft:rgba(255,79,139,.14);
+  --own:#3ddc97; --own-soft:rgba(61,220,151,.14);
+  --play:#4da3ff; --play-soft:rgba(77,163,255,.14);
+  --pend:#ffb547; --pend-soft:rgba(255,181,71,.14);
+  --violet:#a78bfa; --star:#ffc93d;
+  --glow1:rgba(255,79,139,.13); --glow2:rgba(77,163,255,.12); --glow3:rgba(167,139,250,.08);
+  --shadow:0 1px 0 rgba(255,255,255,.03) inset,0 14px 34px -18px rgba(0,0,0,.8);
+  --display:"Sora","Segoe UI",system-ui,sans-serif;
+  --body:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --holo:linear-gradient(var(--accent),var(--accent));
+  --r:10px;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]){
+  --bg:#eceef4; --surface:#ffffff; --raised:#ffffff; --sunk:#f3f4f8; --line:#dcdfe8;
+  --fg:#141720; --muted:#5d6477;
+  --accent:#e0266b; --accent-ink:#ffffff; --accent-soft:rgba(224,38,107,.1);
+  --own:#0f9a60; --own-soft:rgba(15,154,96,.1);
+  --play:#1d74db; --play-soft:rgba(29,116,219,.1);
+  --pend:#b87200; --pend-soft:rgba(184,114,0,.11);
+  --violet:#7457e0; --star:#e9a100;
+  --glow1:rgba(224,38,107,.10); --glow2:rgba(29,116,219,.10); --glow3:rgba(116,87,224,.07);
+  --shadow:0 1px 2px rgba(20,23,32,.06),0 12px 28px -16px rgba(20,23,32,.25);
+  color-scheme:light}}
+:root[data-theme="light"]{
+  --bg:#eceef4; --surface:#ffffff; --raised:#ffffff; --sunk:#f3f4f8; --line:#dcdfe8;
+  --fg:#141720; --muted:#5d6477;
+  --accent:#e0266b; --accent-ink:#ffffff; --accent-soft:rgba(224,38,107,.1);
+  --own:#0f9a60; --own-soft:rgba(15,154,96,.1);
+  --play:#1d74db; --play-soft:rgba(29,116,219,.1);
+  --pend:#b87200; --pend-soft:rgba(184,114,0,.11);
+  --violet:#7457e0; --star:#e9a100;
+  --glow1:rgba(224,38,107,.10); --glow2:rgba(29,116,219,.10); --glow3:rgba(116,87,224,.07);
+  --shadow:0 1px 2px rgba(20,23,32,.06),0 12px 28px -16px rgba(20,23,32,.25);
+  color-scheme:light}
+*{box-sizing:border-box}
+body{background:radial-gradient(900px 420px at 8% -8%,var(--glow1),transparent 70%),radial-gradient(800px 420px at 92% -6%,var(--glow2),transparent 70%),radial-gradient(700px 500px at 50% 110%,var(--glow3),transparent 70%),var(--bg);background-attachment:fixed;color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.5;min-height:100vh}
+.wrap{max-width:1180px;margin:0 auto;padding-block:26px 72px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;letter-spacing:-.02em}
+h1{font-size:clamp(1.55rem,4vw,2.3rem);font-weight:700;line-height:1.1}
+h2{font-size:clamp(1.35rem,3.2vw,2rem);font-weight:700;line-height:1.12}
+h3{font-size:.95rem;font-weight:600}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--play);outline-offset:2px}
+.label{font-size:.68rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);font-weight:700}
+.num{font-variant-numeric:tabular-nums}
+
+/* header */
+header.top{display:flex;flex-wrap:wrap;gap:16px 24px;align-items:flex-end;justify-content:space-between;margin-bottom:18px}
+.brand{display:flex;flex-direction:column;gap:6px}
+.brand h1 .sticker{display:inline-block;font-family:var(--body);font-size:.42em;font-weight:800;vertical-align:.45em;margin-left:.5em;padding:.3em .65em;border-radius:6px;background:var(--holo);background-size:200% 100%;color:#14101c;letter-spacing:.04em;text-transform:uppercase}
+.totals{display:flex;gap:8px;flex-wrap:wrap}
+.chip{display:flex;flex-direction:column;padding:8px 14px;border-radius:var(--r);background:var(--surface);border:1px solid var(--line);min-width:84px}
+.chip b{font-family:var(--display);font-size:1.12rem;font-weight:600}
+.chip.own b{color:var(--own)}
+.chip.wish b{color:var(--accent)}
+.headright{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.themebtn{width:44px;height:44px;flex:none;border-radius:var(--r);border:1px solid var(--line);background:var(--surface);font-size:1.15rem;line-height:1;display:grid;place-items:center;padding:0}
+.themebtn:hover{background:var(--raised);border-color:var(--muted)}
+@media (prefers-reduced-motion:no-preference){.themebtn{transition:transform .3s ease}.themebtn:active{transform:rotate(40deg) scale(.92)}}
+.status{font-size:.85rem;color:var(--muted);margin:0 0 12px}
+.status.warn{color:var(--accent);font-weight:700}
+
+/* top nav like a launcher */
+.apps{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:22px;max-width:100%;overflow-x:auto}
+.appbtn{border:0;background:none;padding:10px 16px 12px;font-family:var(--display);font-weight:600;font-size:.82rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);white-space:nowrap;position:relative}
+.appbtn:hover{color:var(--fg)}
+.appbtn[aria-pressed="true"]{color:var(--fg)}
+.appbtn[aria-pressed="true"]::after{content:"";position:absolute;left:12px;right:12px;bottom:-1px;height:3px;border-radius:3px 3px 0 0;background:var(--holo)}
+.layout{display:grid;grid-template-columns:250px minmax(0,1fr);gap:22px;align-items:start}
+.layout.solo{grid-template-columns:minmax(0,1fr)}
+@media (max-width:780px){.layout{grid-template-columns:minmax(0,1fr);gap:16px}}
+
+/* home */
+:root{--cine:#ff6b3d;--anime:#b57bff;--manga:#22d3ee}
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]){--cine:#d4470f;--anime:#7e3fdb;--manga:#0a87a3}}
+:root[data-theme="light"]{--cine:#d4470f;--anime:#7e3fdb;--manga:#0a87a3}
+body[data-app="media"]{--sec:var(--cine)}
+body[data-app="anime"]{--sec:var(--anime)}
+body[data-app="manga"]{--sec:var(--manga)}
+@media (max-width:620px){.apps{flex-wrap:wrap;overflow:visible}}
+.chip.cine b{color:var(--c,var(--sec))}
+.tab[data-mtab="watching"]{--tc:var(--sec)}.tab[data-mtab="pending"]{--tc:var(--pend)}.tab[data-mtab="done"]{--tc:var(--own)}
+.mcard .pcimg{aspect-ratio:2/3}
+.mcard.st-watching .pcimg{box-shadow:0 0 0 2px var(--sec),0 12px 26px -12px var(--sec)}
+.badge.watching{background:var(--sec);color:var(--on-color)}
+.acts .watch{background:var(--sec);color:var(--on-color);border-color:transparent}
+.chiprow{display:flex;gap:5px;flex-wrap:wrap}
+.eprow{display:flex;align-items:center;gap:8px;margin-top:4px;font-weight:700;font-size:.85rem;color:var(--sec)}
+.epbtn{border:1px solid var(--sec);background:transparent;color:var(--sec);border-radius:6px;padding:2px 8px;font-size:.75rem;font-weight:800}
+.epbtn:hover{background:var(--sec);color:var(--on-color)}
+.eprow{flex-wrap:wrap;row-gap:4px}.eprow .epl{white-space:nowrap}.epbtn{white-space:nowrap}
+.eprow.full{color:var(--own)}
+.eprow.full .epbtn{border-color:var(--own);color:var(--own)}
+.eprow.full .epbtn:hover{background:var(--own);color:#08170f}
+.epbar{height:4px;border-radius:999px;background:var(--line);overflow:hidden;margin-top:4px}
+.epbar span{display:block;height:100%;background:var(--sec);border-radius:999px}
+.eprow.full+.epbar span{background:var(--own)}
+.nowg.nowm .cv{box-shadow:0 0 0 2px var(--c),0 10px 22px -10px var(--c);aspect-ratio:2/3;width:86px}
+.nowg.nowm{width:86px}
+@media (max-width:520px){.appbtn{padding:10px 8px 12px;font-size:.72rem;letter-spacing:.03em}.appbtn .lg{display:none}.tabs{flex-wrap:wrap;overflow:visible}.tab{padding:10px 8px 12px;font-size:.9rem}}
+@media (prefers-reduced-motion:no-preference){.mcard.st-watching:hover .pcimg{box-shadow:0 0 0 2px var(--sec),0 18px 34px -12px var(--sec)}}
+.home{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px}
+@media (max-width:780px){.home{grid-template-columns:minmax(0,1fr)}}
+.hcard{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column;min-width:0}
+.hbody{padding:18px 22px 22px;display:flex;flex-direction:column;gap:14px;flex:1}
+.hbody .btn{align-self:flex-start;margin-top:auto}
+.hbody .meta{margin:0;font-size:.88rem;color:var(--muted)}
+.avs{display:flex;flex-wrap:wrap;gap:12px;margin-top:16px}
+.hav{width:52px;height:52px;border-radius:50%;padding:0;border:0;overflow:hidden;box-shadow:0 0 0 2px var(--surface),0 0 0 4px var(--c);background:var(--raised);font-family:var(--display);font-weight:700;font-size:.8rem;color:var(--c);display:grid;place-items:center}
+.hav img{width:100%;height:100%;object-fit:cover;display:block}
+.more{align-self:center;font-weight:700;color:var(--fg);opacity:.75}
+.nowrow{display:flex;gap:14px;overflow-x:auto;padding:6px 4px 6px}
+.nowg{flex:none;width:92px;border:0;background:none;padding:0;text-align:left;display:flex;flex-direction:column;gap:6px}
+.nowg .cv{width:92px;aspect-ratio:3/4;border-radius:8px;overflow:hidden;box-shadow:0 0 0 2px var(--play),0 10px 22px -10px var(--play);background:var(--holo);background-size:200% 100%;display:grid;place-items:center;font-family:var(--display);font-weight:700;color:#14101c}
+.nowg .cv img{width:100%;height:100%;object-fit:cover;display:block}
+.nowg .t{font-size:.78rem;font-weight:700;line-height:1.25;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.recent{margin-top:18px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px 22px;box-shadow:var(--shadow)}
+.recent ul{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-direction:column}
+.recent li+li{border-top:1px solid var(--line)}
+.rbtn{display:flex;gap:12px;align-items:center;width:100%;text-align:left;background:none;border:0;padding:10px 8px;border-radius:8px}
+.rbtn:hover{background:var(--raised)}
+.rth{width:42px;height:42px;border-radius:6px;overflow:hidden;flex:none;background:var(--holo);background-size:200% 100%;display:grid;place-items:center;font-size:.75rem;font-weight:800;font-family:var(--display);color:#14101c}
+.rth img{width:100%;height:100%;object-fit:cover;display:block}
+.rtx{flex:1;min-width:0;display:flex;flex-direction:column}
+.rtx b{font-weight:600;overflow-wrap:anywhere}
+.rtx small{color:var(--muted)}
+.rwhen{font-size:.78rem;color:var(--muted);white-space:nowrap}
+@media (prefers-reduced-motion:no-preference){.hav,.nowg .cv{transition:transform .2s ease}.hav:hover,.nowg:hover .cv{transform:scale(1.06)}}
+
+/* games specifics */
+.chip.done b{color:var(--own)}.chip.play b{color:var(--play)}.chip.pend b{color:var(--pend)}
+.gsub{margin:6px 0 12px;color:var(--fg);opacity:.85;font-weight:600}
+.gprog{height:8px;border-radius:999px;background:rgba(127,127,127,.25);overflow:hidden;max-width:440px}
+.gprog span{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--own),var(--play))}
+.gcard .pcimg .ph{font-size:1.4rem;padding:8px;text-align:center}
+.gcard.st-done .pcimg{padding:2px;background:var(--holo)}
+.gcard.st-done .pcimg img,.gcard.st-done .pcimg .ph{border-radius:6px}
+.gcard.st-playing .pcimg{box-shadow:0 0 0 2px var(--play),0 12px 26px -12px var(--play)}
+.gcard.st-pending .pcimg img{filter:grayscale(.75) brightness(.85)}
+.gcard.st-pending:hover .pcimg img{filter:none}
+.badge.done{background:var(--own);color:#0c1a13}
+.badge.playing{background:var(--play);color:#0a1422}
+.badge.pending{background:var(--pend);color:#1f1300}
+.plat{align-self:flex-start;font-size:.64rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;padding:2px 7px;border-radius:4px;background:var(--raised);border:1px solid var(--line);color:var(--muted);margin-top:3px}
+.stars{display:flex;gap:1px;margin-top:3px}
+.star{background:none;border:0;padding:0 1px;font-size:1.1rem;line-height:1;color:var(--line)}
+.star.on{color:var(--star)}
+button.star:hover{transform:scale(1.15)}
+
+/* group rail = library sidebar */
+.rail{display:flex;flex-direction:column;gap:2px;position:sticky;top:calc(env(safe-area-inset-top,0px) + 14px);background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px;box-shadow:var(--shadow)}
+.rail>.label{padding:6px 10px 6px}
+@media (max-width:780px){.rail{position:static;flex-direction:row;align-items:flex-start;overflow-x:auto;padding:8px;scrollbar-width:thin}.rail>.label{display:none}.rail .gbtn{align-self:flex-start}}
+.gbtn{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:none;border:0;border-radius:8px;padding:7px 10px;white-space:nowrap;color:var(--muted)}
+.gbtn:hover{background:var(--raised);color:var(--fg)}
+.gbtn[aria-current="true"]{background:color-mix(in srgb,var(--c) 18%,var(--surface));color:var(--fg)}
+@media (max-width:780px){.gbtn{width:auto;flex:none}}
+.av{width:32px;height:32px;border-radius:50%;object-fit:cover;flex:none;box-shadow:0 0 0 2px var(--c,var(--line));background:var(--raised);display:grid;place-items:center;font-family:var(--display);font-size:.68rem;font-weight:700;color:var(--c)}
+.gname{flex:1;font-weight:700;overflow:hidden;text-overflow:ellipsis}
+.gcount{font-size:.72rem;color:var(--muted);background:var(--sunk);border-radius:4px;padding:1px 7px}
+.addgroup{margin-top:8px;display:flex;flex-direction:column;gap:8px;padding:12px;border:1px dashed var(--line);border-radius:10px;background:var(--sunk)}
+.addwrap{margin-top:8px}.addwrap>summary{list-style:none;cursor:pointer;padding:8px 10px;border-radius:8px;font-weight:700;color:var(--muted);border:1px dashed var(--line)}.addwrap>summary::-webkit-details-marker{display:none}.addwrap>summary:hover{color:var(--fg);border-color:var(--muted)}.addwrap[open]>summary{margin-bottom:8px;color:var(--fg)}.addwrap .addgroup{margin-top:0}
+@media (max-width:780px){.rail{flex-wrap:wrap;overflow:visible}.addwrap{flex:1 1 100%;margin-top:4px}}
+.swatches{display:flex;flex-wrap:wrap;gap:6px}
+.sw{width:22px;height:22px;border-radius:50%;border:2px solid var(--surface);box-shadow:0 0 0 1px var(--line);background:var(--c);padding:0}
+.sw[aria-pressed="true"]{box-shadow:0 0 0 2px var(--fg)}
+.swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(24px,1fr));gap:7px;justify-items:center}
+.sw{width:24px;height:24px}
+.swc{position:relative;width:24px;height:24px;border-radius:50%;border:1px dashed var(--muted);display:grid;place-items:center;color:var(--muted);font-weight:800;font-size:.95rem;line-height:1;cursor:pointer;overflow:hidden;background:var(--cc,transparent)}
+.swc.on{border:2px solid var(--surface);box-shadow:0 0 0 2px var(--fg);color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.6)}
+.swc input{position:absolute;inset:0;opacity:0;width:100%;height:100%;cursor:pointer;border:0;padding:0}
+.swhint{font-size:.72rem;color:var(--muted)}
+.gedit{display:flex;flex-direction:column;gap:10px;max-width:440px;background:color-mix(in srgb,var(--surface) 82%,transparent);backdrop-filter:blur(8px);padding:14px;border-radius:10px;border:1px solid var(--line)}
+.gedit label{display:flex;flex-direction:column;gap:4px}
+.gedit .editacts{display:flex;gap:8px;flex-wrap:wrap}
+.filelab{font-size:.8rem;color:var(--muted);display:flex;flex-direction:column;gap:4px;font-weight:600}
+.filelab input{font-size:.78rem;max-width:100%}
+
+input[type=text],input[type=number],select,textarea{width:100%;background:var(--sunk);border:1px solid var(--line);border-radius:8px;padding:9px 12px;min-width:0}
+input::placeholder{color:var(--muted);opacity:.8}
+input:focus,select:focus,textarea:focus{border-color:var(--play);outline:none;box-shadow:0 0 0 3px var(--play-soft)}
+.btn{border:0;border-radius:8px;padding:9px 18px;font-weight:700;background:var(--accent);color:var(--accent-ink);box-shadow:0 8px 20px -10px var(--accent)}
+.btn:hover{filter:brightness(1.08)}
+.btn:disabled{opacity:.55;cursor:default}
+.btn.ghost{background:var(--raised);color:var(--fg);border:1px solid var(--line);box-shadow:none}
+.btn.sm{padding:6px 14px;font-size:.85rem}
+
+/* page + hero banner */
+.page{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:var(--shadow)}
+.banner{position:relative;overflow:hidden;padding:30px 26px 22px;min-height:170px;display:flex;flex-direction:column;justify-content:flex-end;isolation:isolate;background:radial-gradient(120% 140% at 0% 0%,color-mix(in srgb,var(--c) 55%,transparent),transparent 60%),radial-gradient(90% 120% at 100% 0%,color-mix(in srgb,var(--violet) 30%,transparent),transparent 65%),var(--raised)}
+.banner::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,transparent 0%,color-mix(in srgb,var(--surface) 55%,transparent) 55%,var(--surface) 100%)}
+.banner .bg{position:absolute;inset:-30px;z-index:-2;width:calc(100% + 60px);height:calc(100% + 60px);object-fit:cover;filter:blur(22px) saturate(1.35);opacity:.8}
+.hcard .banner{min-height:150px}
+.bannerrow{display:flex;gap:22px;align-items:flex-end;flex-wrap:wrap}
+.pc{flex:none;width:124px;aspect-ratio:1/1;max-width:100%;border-radius:50%;padding:0;background:var(--raised);box-shadow:0 0 0 3px var(--surface),0 0 0 5px var(--c,var(--accent)),0 18px 36px -14px rgba(0,0,0,.7);border:0;display:block;position:relative;overflow:hidden}
+.pc .in{width:100%;height:100%;border-radius:50%;overflow:hidden;display:grid;place-items:center;background:var(--holo);font-family:var(--display);font-weight:700;font-size:1.9rem;color:#14101c;text-align:center}
+.pc img{width:100%;height:100%;object-fit:cover;display:block}
+.pc .hint{display:block;font-family:var(--body);font-size:.66rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;margin-top:4px}
+button.pc:hover{transform:scale(1.04)}
+@media (max-width:480px){.pc{width:88px}.pc .in{font-size:1.4rem}.banner{padding:24px 18px 18px}}
+.gtitle{display:flex;flex-direction:column;gap:10px;min-width:0;flex:1}
+.gtitle h2{overflow-wrap:anywhere;text-shadow:0 2px 18px rgba(0,0,0,.35)}
+.photoacts{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.link{background:none;border:0;padding:0;font-size:.82rem;font-weight:600;color:var(--fg);opacity:.7;text-decoration:underline;text-underline-offset:3px}
+.link:hover{opacity:1}
+.link.danger{color:var(--accent);opacity:1}
+.stats{display:flex;gap:8px;flex-wrap:wrap}
+.stats .chip{background:color-mix(in srgb,var(--surface) 70%,transparent);backdrop-filter:blur(8px);min-width:0;padding:6px 12px}
+.stats .chip b{font-size:1rem}
+
+/* tabs = underline filters */
+.tabsbar{padding:14px 26px 0;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center;border-bottom:1px solid var(--line)}
+.tabs{display:flex;gap:2px;overflow-x:auto;max-width:100%}
+.tab{background:none;border:0;padding:10px 14px 12px;font-weight:700;color:var(--muted);display:flex;align-items:center;gap:7px;white-space:nowrap;position:relative}
+.tab:hover{color:var(--fg)}
+.tab[aria-selected="true"]{color:var(--fg)}
+.tab[aria-selected="true"]::after{content:"";position:absolute;left:10px;right:10px;bottom:-1px;height:3px;border-radius:3px 3px 0 0;background:var(--tc,var(--play))}
+.tab[data-tab="wish"]{--tc:var(--accent)}.tab[data-tab="own"]{--tc:var(--own)}
+.tab[data-gtab="playing"]{--tc:var(--play)}.tab[data-gtab="pending"]{--tc:var(--pend)}.tab[data-gtab="done"]{--tc:var(--own)}
+.tab .pill{font-size:.7rem;border-radius:4px;padding:0 6px;background:var(--raised);color:var(--muted)}
+.tab[aria-selected="true"] .pill{background:color-mix(in srgb,var(--tc,var(--play)) 18%,transparent);color:var(--tc,var(--play))}
+.search{max-width:240px;margin-bottom:8px}
+
+.body{padding:18px 26px 26px;display:flex;flex-direction:column;gap:18px}
+@media (max-width:480px){.body{padding:16px}.tabsbar{padding:12px 16px 0}.sections{padding:14px 16px 0!important}}
+.additem{display:grid;grid-template-columns:120px minmax(0,1fr);gap:14px;align-items:start;background:var(--sunk);border:1px solid var(--line);padding:14px;border-radius:12px}
+.additem .pcpick{aspect-ratio:1/1}
+.mfields{display:grid;grid-template-columns:2fr 1fr 1fr 96px auto;gap:10px;align-items:end;min-width:0}
+.mfields label{display:flex;flex-direction:column;gap:4px;min-width:0}
+.mfields .full{grid-column:1/-1}
+@media (max-width:980px){.mfields{grid-template-columns:1fr 1fr}.mfields .name,.mfields .btn{grid-column:1/-1}}
+@media (max-width:540px){.additem{grid-template-columns:90px minmax(0,1fr)}.mfields{grid-template-columns:minmax(0,1fr)}}
+
+/* merch cards = store capsules */
+.items{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
+.card{position:relative;display:flex;flex-direction:column;gap:6px;padding:14px 14px 12px;border-radius:12px;overflow:hidden;isolation:isolate;background:var(--raised);border:1px solid var(--line)}
+.card.own{border-color:color-mix(in srgb,var(--own) 45%,var(--line))}
+.card.wish .cimg img{filter:grayscale(.7) brightness(.85)}
+.card.wish:hover .cimg img{filter:none}
+.cimg{display:block;width:calc(100% + 28px);max-width:none;margin:-14px -14px 6px;aspect-ratio:1/1;border:0;padding:0;overflow:hidden;background:var(--sunk);position:relative;border-radius:0}
+.cimg img{width:100%;height:100%;object-fit:cover;display:block}
+.cimg .ph{width:100%;height:100%;display:grid;place-items:center;font-size:1.4rem;color:var(--muted)}
+button.cimg:hover img{filter:brightness(1.08)}
+.card .top{display:flex;justify-content:space-between;gap:8px;align-items:center}
+.kind{font-size:.64rem;text-transform:uppercase;letter-spacing:.1em;font-weight:800;padding:2px 8px;border-radius:4px;background:var(--sunk);color:var(--muted)}
+.card.own .kind{background:var(--own-soft);color:var(--own)}
+.card.wish .kind{background:var(--accent-soft);color:var(--accent)}
+.price{font-weight:700;font-size:.88rem}
+.title{font-family:var(--display);font-weight:600;font-size:.98rem;line-height:1.25;overflow-wrap:anywhere;margin-top:2px}
+.meta{font-size:.83rem;color:var(--muted);overflow-wrap:anywhere}
+.acts{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:auto;padding-top:8px}
+.acts button{font-size:.78rem;font-weight:700;border-radius:6px;padding:6px 11px;border:1px solid var(--line);background:var(--surface)}
+.acts button:hover{border-color:var(--muted)}
+.acts .got{background:linear-gradient(90deg,#3ddc97,#1fb87c);color:#08170f;border-color:transparent}
+.acts .play{background:linear-gradient(90deg,#4da3ff,#2f7fe6);color:#06101f;border-color:transparent}
+.acts .got:hover,.acts .play:hover{filter:brightness(1.08)}
+.acts .del:hover{color:var(--accent);border-color:var(--accent)}
+.acts .icons{display:flex;gap:4px;margin-left:auto}
+.acts .ib{width:32px;height:32px;padding:0;display:grid;place-items:center;border-radius:6px;color:var(--muted);background:transparent}
+.acts .ib:hover{color:var(--fg);background:var(--surface)}
+.acts .ib.del:hover{color:var(--accent);border-color:var(--accent)}
+.acts .ib svg{width:16px;height:16px;display:block}
+.confirm.full{width:100%}
+.editf{display:flex;flex-direction:column;gap:8px;margin-top:4px}
+.editf label{display:flex;flex-direction:column;gap:3px;min-width:0}
+.editf input,.editf select{padding:7px 10px;font-size:.88rem}
+.editf .editacts{display:flex;gap:6px;flex-wrap:wrap;padding-top:2px}
+
+.empty{padding:38px 20px;text-align:center;border:1px dashed var(--line);border-radius:12px;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:6px;background:var(--sunk)}
+.empty .sleeve{width:48px;aspect-ratio:3/4;border-radius:6px;background:var(--holo);opacity:.55;margin-bottom:8px}
+.empty h3{color:var(--fg)}
+.empty p{margin:0;max-width:46ch}
+.welcome{position:relative;overflow:hidden;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:32px 28px;display:flex;flex-direction:column;gap:14px;box-shadow:var(--shadow);isolation:isolate}
+.welcome::before{content:"";position:absolute;right:-60px;top:-80px;width:260px;height:260px;border-radius:50%;background:var(--holo);filter:blur(40px);opacity:.35;z-index:-1}
+.welcome p{margin:0;max-width:52ch;color:var(--muted)}
+.welcome ol{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:6px;max-width:56ch}
+.confirm{display:flex;gap:6px;align-items:center;flex-wrap:wrap;font-size:.83rem;font-weight:600}
+.ro{font-size:.85rem;background:var(--accent-soft);color:var(--fg);padding:10px 14px;border-radius:8px;margin:0}
+
+/* sections + photocards */
+.sections{display:flex;gap:8px;flex-wrap:wrap;padding:18px 26px 0}
+.secbtn{display:flex;align-items:center;gap:8px;padding:9px 14px;border-radius:8px;border:1px solid var(--line);background:var(--raised);font-weight:700;color:var(--muted)}
+.secbtn:hover{color:var(--fg);border-color:var(--muted)}
+.secbtn[aria-pressed="true"]{color:var(--fg);border-color:transparent;background:linear-gradient(var(--raised),var(--raised)) padding-box,var(--holo) border-box;border:1px solid transparent}
+.secbtn .ic{font-size:1.1rem;line-height:1}
+.secbtn .pill{font-size:.7rem;border-radius:4px;padding:0 6px;background:var(--sunk);color:var(--muted)}
+.mchips{display:flex;gap:6px;flex-wrap:wrap}
+.mchip{border-radius:6px;border:1px solid var(--line);background:var(--raised);padding:5px 12px;font-size:.8rem;font-weight:700;color:var(--muted)}
+.mchip:hover{color:var(--fg);border-color:var(--muted)}
+.mchip[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.addpc{display:grid;grid-template-columns:140px minmax(0,1fr);gap:14px;background:var(--sunk);border:1px solid var(--line);padding:14px;border-radius:12px;align-items:start}
+.pcpick{width:100%;max-width:100%;aspect-ratio:5.5/8.5;border-radius:8px;border:1px dashed var(--muted);background:var(--raised);padding:0;overflow:hidden;display:grid;place-items:center;color:var(--muted);font-size:1.7rem;font-weight:700;text-align:center}
+.pcpick:hover{border-color:var(--play);color:var(--play)}
+.pcpick img{width:100%;height:100%;object-fit:cover;display:block}
+.pcpick small{display:block;font-size:.7rem;font-weight:700;margin-top:4px;padding:0 8px;line-height:1.3}
+.pcfields{display:grid;grid-template-columns:1fr 1fr;gap:10px;min-width:0}
+.pcfields label{display:flex;flex-direction:column;gap:4px;min-width:0}
+.pcfields .full{grid-column:1/-1}
+@media (max-width:540px){.addpc{grid-template-columns:104px minmax(0,1fr)}.pcfields{grid-template-columns:minmax(0,1fr)}}
+
+/* cover-art grid (photocards + games) */
+.pcgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(158px,1fr));gap:20px 16px}
+@media (max-width:480px){.pcgrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 12px}}
+.pcard{position:relative;display:flex;flex-direction:column;gap:8px;min-width:0}
+.pcimg{display:block;width:100%;max-width:100%;aspect-ratio:5.5/8.5;border-radius:8px;overflow:hidden;padding:0;border:0;background:var(--holo);position:relative;box-shadow:0 12px 26px -16px rgba(0,0,0,.8)}
+.gcard .pcimg{aspect-ratio:3/4}
+.pcard.own .pcimg{padding:2px}
+.pcard.own .pcimg img,.pcard.own .pcimg .ph{border-radius:6px}
+.pcard.wish .pcimg img{filter:grayscale(.75) brightness(.85)}
+.pcard.wish:hover .pcimg img{filter:none}
+.pcimg img{width:100%;height:100%;object-fit:cover;display:block}
+.pcimg .ph{width:100%;height:100%;display:grid;place-items:center;font-family:var(--display);font-weight:700;font-size:1.7rem;color:#14101c}
+.pcard .pcimg::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.35) 45%,transparent 60%);background-size:250% 100%;background-position:130% 0;mix-blend-mode:soft-light;pointer-events:none}
+.badge{position:absolute;top:8px;right:8px;width:26px;height:26px;border-radius:6px;display:grid;place-items:center;font-weight:800;font-size:.8rem;box-shadow:0 4px 12px -4px rgba(0,0,0,.6);pointer-events:none}
+.badge.own{background:var(--own);color:#0c1a13}
+.badge.wish{background:var(--accent);color:#1a0710}
+.pcinfo{display:flex;flex-direction:column;gap:2px;min-width:0}
+.pcmem{font-family:var(--display);font-weight:600;font-size:.94rem;overflow-wrap:anywhere}
+.pcinfo .acts{padding-top:6px}
+
+@media (prefers-reduced-motion:no-preference){
+  .card,.pcard{transition:transform .2s ease}
+  .card:hover,.pcard:hover{transform:translateY(-4px)}
+  .card{transition:transform .2s ease,box-shadow .2s ease}
+  .card.own:hover{box-shadow:0 16px 34px -18px var(--own)}
+  .card.wish:hover{box-shadow:0 16px 34px -18px var(--accent)}
+  .pcimg{transition:box-shadow .2s ease}
+  .pcard.own:hover .pcimg,.gcard.st-done:hover .pcimg{box-shadow:0 18px 34px -14px var(--own)}
+  .pcard.wish:hover .pcimg{box-shadow:0 18px 34px -14px var(--accent)}
+  .gcard.st-playing:hover .pcimg{box-shadow:0 0 0 2px var(--play),0 18px 34px -12px var(--play)}
+  .gcard.st-pending:hover .pcimg{box-shadow:0 18px 34px -14px var(--pend)}
+  .pcard:hover .pcimg::after{animation:sheen 1.4s ease-in-out}
+  .pcimg img,.cimg img{transition:filter .25s ease}
+  .brand .sticker{animation:holo 10s linear infinite}
+  .pc{transition:transform .25s ease}
+}
+[hidden]{display:none!important}
+.apps,.tabs,.rail,.nowrow,.totals{scrollbar-width:none;-ms-overflow-style:none;overflow-y:hidden}
+.apps::-webkit-scrollbar,.tabs::-webkit-scrollbar,.rail::-webkit-scrollbar,.nowrow::-webkit-scrollbar,.totals::-webkit-scrollbar{display:none}
+.appbtn[aria-pressed="true"]::after,.tab[aria-selected="true"]::after{bottom:0}
+.apps{padding-bottom:0}
+@media (max-width:520px){.headright{width:100%;flex-wrap:nowrap}.totals{flex:1;flex-wrap:nowrap;overflow-x:auto;min-width:0}.totals .chip{min-width:0;padding:6px 10px;flex:none}.totals .chip b{font-size:1rem}}
+@keyframes sheen{from{background-position:130% 0}to{background-position:-130% 0}}
+@keyframes holo{from{background-position:0% 0}to{background-position:200% 0}}
+/* each section has its own color: Inicio violet, K-pop pink, Juegos blue */
+:root{--on-color:#0e1016}
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]){--on-color:#ffffff}}
+:root[data-theme="light"]{--on-color:#ffffff}
+body{--sec:var(--fg)}
+body[data-app="kpop"]{--sec:var(--accent)}
+body[data-app="games"]{--sec:var(--play)}
+body{background:radial-gradient(900px 420px at 8% -8%,color-mix(in srgb,var(--sec) 16%,transparent),transparent 70%),radial-gradient(800px 420px at 92% -6%,color-mix(in srgb,var(--sec) 9%,transparent),transparent 70%),var(--bg);background-attachment:fixed}
+:focus-visible{outline-color:var(--sec)}
+input:focus,select:focus,textarea:focus{border-color:var(--sec);box-shadow:0 0 0 3px color-mix(in srgb,var(--sec) 20%,transparent)}
+.btn{background:var(--sec);color:var(--on-color);box-shadow:0 8px 20px -10px var(--sec)}
+.btn.ghost{background:var(--raised);color:var(--fg);box-shadow:none}
+.hcard .btn{background:var(--c);color:var(--on-color);box-shadow:0 8px 20px -10px var(--c)}
+.appbtn[aria-pressed="true"]::after{background:var(--sec)}
+.pcpick:hover{border-color:var(--sec);color:var(--sec)}
+.status.warn{color:var(--sec)}
+/* solid colors instead of rainbow */
+.brand h1 .sticker{background:var(--sec);color:var(--on-color);animation:none}
+.pcimg,.pc .in,.nowg .cv,.rth,.empty .sleeve{background:var(--raised);color:var(--fg)}
+.pcimg .ph,.pc .in,.nowg .cv,.rth{color:var(--fg)}
+.pcimg .ph{background:var(--raised)}
+.pcard.own .pcimg,.gcard.st-done .pcimg{background:var(--own)}
+.gcard.st-playing .pcimg{background:var(--raised)}
+.empty .sleeve{border:1px solid var(--line);opacity:1}
+.gprog span{background:var(--own)}
+.welcome::before{background:var(--sec)}
+.secbtn[aria-pressed="true"]{background:var(--raised);border:1px solid var(--sec)}
+</style>
+
+<input type="file" id="photoIn" accept="image/*" hidden>
+<input type="file" id="pcFile" accept="image/*" hidden>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <span class="label" id="brandLabel">Álbumes · Photocards · Merch</span>
+      <h1 id="brandTitle">Mi Colección<span class="sticker">K-pop</span></h1>
+    </div>
+    <div class="headright">
+      <div class="totals" id="totals" aria-live="polite"></div>
+      <button class="themebtn" id="themeBtn" type="button" aria-label="Cambiar a modo oscuro" title="Cambiar a modo oscuro">🌙</button>
+    </div>
+  </header>
+  <nav class="apps" aria-label="Apartados"><button class="appbtn" data-app="home" aria-pressed="true">🏠 Inicio</button><button class="appbtn" data-app="kpop" aria-pressed="false">💿 K-pop</button><button class="appbtn" data-app="games" aria-pressed="false">🎮 Juegos</button><button class="appbtn" data-app="media" aria-pressed="false">🎬 Pelis<span class="lg"> y series</span></button><button class="appbtn" data-app="anime" aria-pressed="false">🍥 Anime</button><button class="appbtn" data-app="manga" aria-pressed="false">📚 Manga</button></nav>
+  <p class="status" id="status">Cargando tu colección…</p>
+  <datalist id="platList"><option>PC</option><option>PS5</option><option>PS4</option><option>Switch</option><option>Switch 2</option><option>Xbox Series</option><option>Steam Deck</option><option>Móvil</option><option>Retro</option></datalist>
+  <datalist id="streamList"><option>Netflix</option><option>Disney+</option><option>Max</option><option>Prime Video</option><option>Apple TV+</option><option>Movistar Plus+</option><option>Filmin</option><option>SkyShowtime</option><option>Crunchyroll</option><option>Cine</option><option>Blu-ray / DVD</option></datalist>
+  <datalist id="animeList"><option>Crunchyroll</option><option>Netflix</option><option>Prime Video</option><option>Disney+</option><option>Max</option><option>ADN</option><option>Cine</option></datalist>
+  <datalist id="mangaList"><option>Norma Editorial</option><option>Planeta Cómic</option><option>Ivrea</option><option>Panini</option><option>Milky Way</option><option>Kodai</option><option>ECC</option><option>Arechi</option><option>Distrito Manga</option><option>Online</option></datalist>
+  <div class="layout" id="layout">
+    <nav class="rail" id="rail" aria-label="Grupos"></nav>
+    <main id="main"></main>
+  </div>
+</div>
+
+<div class="login" id="login" hidden>
+  <form class="loginbox" id="loginForm" autocomplete="on">
+    <span class="label">K-pop · Juegos · Pelis · Anime · Manga</span>
+    <h1>Mi Colección</h1>
+    <p class="loginsub">Entra con tu cuenta para ver tu colección en cualquier dispositivo.</p>
+    <label><span class="label">Correo</span><input type="email" id="loginEmail" autocomplete="username" required></label>
+    <label><span class="label">Contraseña</span><input type="password" id="loginPass" autocomplete="current-password" minlength="6" required></label>
+    <div class="loginacts"><button class="btn" type="submit" id="loginGo">Entrar</button><button class="btn ghost" type="submit" id="loginCreate">Crear cuenta</button></div>
+    <button type="button" class="link" id="loginReset">¿Has olvidado la contraseña?</button>
+  </form>
+  <p class="loginmsg" id="loginMsg" role="status"></p>
+</div>
+<footer class="appfoot" id="appfoot" hidden>
+  <span>Sesión: <b id="footUser"></b></span>
+  <button class="link" id="footExport" type="button">Descargar copia</button>
+  <button class="link" id="footImport" type="button">Importar copia</button>
+  <button class="link" id="footLogout" type="button">Cerrar sesión</button>
+  <span id="footStatus" role="status"></span>
+  <input type="file" id="importFile" accept="application/json,.json" hidden>
+</footer>
+<script>
+window.__photoCache={};window.__photo=()=>"data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
+window.__fbReady=new Promise(r=>window.__fbResolve=r);
+window.claude={use:async n=>{const api=await window.__fbReady;return api?api[n]||null:null;}};
+</script>
+<script>
+const COLORS=["#e2307a","#ff6fa8","#f7a8c8","#e53935","#b71c3c","#f08a24","#ffb38a","#e2b714","#ffe066","#8bc34a","#22b893","#00897b","#9be7d8","#26c6da","#2d8fd9","#1a3e8c","#9cc9ff","#7b5cd6","#b39ddb","#c04fc0","#8d5a3b","#c8a27a","#5b5b6e","#bdbdc7","#ffffff","#111111"];
+const KINDS=["Álbum","Lightstick","Merch","Póster","Season's greetings","Otro"];
+const S={groups:[],items:[],sel:null,tab:"wish",color:COLORS[0],q:"",confirm:null,canWrite:false,ready:false,db:null,assets:null,uploading:null,sec:"merch",member:"",pcFile:null,pcPrev:null,pcBusy:false,pcTarget:null,editing:null,gedit:null,gcolor:null,media:[],anime:[],manga:[],shs:{media:{tab:"watching",type:"",plat:"",q:"",form:"movie"},anime:{tab:"watching",type:"",plat:"",q:"",form:"series"},manga:{tab:"watching",type:"",plat:"",q:"",form:"manga"}},meType:null,app:"home",games:[],gtab:"playing",plat:"",gq:""};
+try{const gt=localStorage.getItem("kp-gtab");if(gt==="pending"||gt==="playing"||gt==="done")S.gtab=gt;}catch(e){}
+const HASH={home:"#inicio",kpop:"#kpop",games:"#juegos",media:"#pelis",anime:"#anime",manga:"#manga"};
+const fromHash=h=>h==="#juegos"?"games":h==="#kpop"?"kpop":h==="#inicio"?"home":h==="#pelis"?"media":h==="#anime"?"anime":h==="#manga"?"manga":null;
+S.app=fromHash(location.hash)||"home";
+function goApp(a){S.app=a;S.editing=null;S.confirm=null;S.plat="";clearPc();const h=HASH[a]||"#inicio";if(location.hash!==h){try{history.replaceState(null,"",h)}catch(e){location.hash=h}}$("#main").innerHTML="";render();try{window.scrollTo(0,0)}catch(e){}}
+window.addEventListener("hashchange",()=>{const a=fromHash(location.hash);if(a&&a!==S.app)goApp(a);});
+let toastT=null;function toast(m){status(m);clearTimeout(toastT);toastT=setTimeout(()=>status(""),2600);}
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&S.editing){S.editing=null;render();}});
+const isPc=i=>i.kind==="Photocard";
+try{const sc=localStorage.getItem("kp-sec");if(sc==="pc"||sc==="merch")S.sec=sc;}catch(e){}
+const upErr=e=>{const c=e&&e.code;return c==="quota_exceeded"||c==="too_large"?"La foto es demasiado grande o no queda espacio. Prueba con otra imagen.":c==="invalid_request"?"Ese formato de imagen no se puede usar. Prueba con JPG o PNG.":c==="invalid_argument"?"No tienes permiso para editar esta colección.":"No se pudo guardar. Revisa la conexión e inténtalo de nuevo.";};
+function clearPc(){if(S.pcPrev){try{URL.revokeObjectURL(S.pcPrev)}catch(e){}}S.pcPrev=null;S.pcFile=null;}
+function setMain(html){
+  const m=$("#main"),vals={},a=document.activeElement;
+  m.querySelectorAll("input[id],select[id]").forEach(el=>{if(el.type!=="file")vals[el.id]=el.value;});
+  const fid=a&&m.contains(a)?a.id:"";let ss=null;
+  try{if(fid&&a.selectionStart!=null)ss=[a.selectionStart,a.selectionEnd];}catch(e){}
+  m.innerHTML=html;
+  for(const k in vals){const el=document.getElementById(k);if(el&&k!=="q")el.value=vals[k];}
+  if(fid){const el=document.getElementById(fid);if(el){el.focus();try{if(ss)el.setSelectionRange(ss[0],ss[1]);}catch(e){}}}
+}
+async function replacePcPhoto(id,file){
+  if(!file||!S.assets||!S.db)return;
+  if(!file.type.startsWith("image/")){status("Elige un archivo de imagen (JPG, PNG, WEBP…).",true);return;}
+  S.uploading="i:"+id;render();status("Subiendo foto…");
+  try{let b;try{b=await shrink(file)}catch(_){b=file}
+    const r=await S.assets.upload(b,{type:b.type||"image/jpeg"});
+    const col=["games","media","anime","manga"].find(k=>S[k].some(x=>x.id===id))||"items";
+    const old=(S[col].find(x=>x.id===id)||{}).photo;
+    await S.db.doc(col+"/"+id).update({photo:r.id});
+    if(old&&old!==r.id)S.assets.delete(old).catch(()=>{});
+    status("");
+  }catch(e){status(upErr(e),true);}finally{S.uploading=null;render();}
+}
+function pcForm(own){
+  const p=S.pcPrev;
+  return `<form class="addpc" id="fPc">
+    ${S.assets?`<button type="button" class="pcpick" data-act="pickpc" aria-label="Elegir foto de la photocard">${p?`<img src="${p}" alt="Vista previa">`:`<span>＋<small>Foto de la photocard</small></span>`}</button>`:""}
+    <div class="pcfields">
+      <label><span class="label">Miembro</span><input type="text" id="pMember" placeholder="p. ej. Felix" maxlength="40"></label>
+      <label><span class="label">Álbum / era</span><input type="text" id="pName" placeholder="p. ej. 5-STAR" maxlength="80"></label>
+      <label><span class="label">Versión / POB</span><input type="text" id="pVer" placeholder="Ver. A, POB Soundwave…" maxlength="60"></label>
+      <label><span class="label">Precio €</span><input type="number" id="pPrice" min="0" step="0.01" inputmode="decimal" placeholder="0"></label>
+      <label class="full"><span class="label">Notas</span><input type="text" id="pNotes" maxlength="200" placeholder="Intercambio, preventa, lucky draw…"></label>
+      <button class="btn full" type="submit" ${S.pcBusy?"disabled":""}>${S.pcBusy?"Subiendo…":own?"Añadir a Tengo":"Añadir a Quiero"}</button>
+    </div>
+  </form>`;
+}
+const ICON={
+  edit:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>',
+  trash:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg>',
+  cam:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4Z"/><circle cx="12" cy="13" r="3.5"/></svg>'
+};
+function acts(i,photoBtn){
+  const own=i.status==="own",c=S.confirm==="i:"+i.id;
+  if(c)return `<div class="acts"><span class="confirm full">¿Borrar? <button class="del" data-act="delitem" data-i="${i.id}">Sí, borrar</button><button data-act="cancel">No</button></span></div>`;
+  return `<div class="acts">${own?`<button data-act="unown" data-i="${i.id}">Volver a Quiero</button>`:`<button class="got" data-act="own" data-i="${i.id}">¡Conseguido!</button>`}<span class="icons">${photoBtn?`<button class="ib" data-act="pcphoto" data-i="${i.id}" aria-label="Añadir foto" title="Añadir foto">${ICON.cam}</button>`:""}<button class="ib" data-act="edit" data-i="${i.id}" aria-label="Editar" title="Editar">${ICON.edit}</button><button class="ib del" data-act="askitem" data-i="${i.id}" aria-label="Borrar" title="Borrar">${ICON.trash}</button></span></div>`;
+}
+function editForm(i){
+  const pc=isPc(i);
+  const f=(id,l,v,m)=>`<label><span class="label">${l}</span><input type="text" id="${id}" value="${esc(v)}" maxlength="${m}"></label>`;
+  return `<form class="editf" data-edit="${i.id}">
+    ${pc?f("eMember","Miembro",i.member,40):""}
+    ${f("eName",pc?"Álbum / era":"Nombre",i.name,80)}
+    ${pc?"":`<label><span class="label">Tipo</span><select id="eKind">${KINDS.map(k=>`<option${k===i.kind?" selected":""}>${esc(k)}</option>`).join("")}${KINDS.includes(i.kind)?"":`<option selected>${esc(i.kind)}</option>`}</select></label>`}
+    ${f("eVer",pc?"Versión / POB":"Versión",i.version,60)}
+    <label><span class="label">Precio €</span><input type="number" id="ePrice" min="0" step="0.01" inputmode="decimal" value="${+i.price||""}"></label>
+    ${f("eNotes","Notas",i.notes,200)}
+    <div class="editacts"><button class="btn sm" type="submit">Guardar</button><button class="btn sm ghost" type="button" data-act="canceledit">Cancelar</button></div>
+  </form>`;
+}
+function pcCard(i){
+  const own=i.status==="own";
+  const sub=[i.name,i.version].filter(Boolean).map(esc).join(" · ");
+  const img=S.uploading==="i:"+i.id?`<span class="ph">…</span>`:i.photo?`<img src="${blob(i.photo)}" alt="Photocard de ${esc(i.member||i.name)}" loading="lazy">`:`<span class="ph">${esc(initials(i.member||i.name||"PC"))}</span>`;
+  return `<article class="pcard ${own?"own":"wish"}">
+    ${S.canWrite&&S.assets?`<button class="pcimg" data-act="pcphoto" data-i="${i.id}" aria-label="${i.photo?"Cambiar":"Añadir"} foto de la photocard">${img}</button>`:`<div class="pcimg">${img}</div>`}
+    <span class="badge ${own?"own":"wish"}">${own?"✓":"♡"}</span>
+    <div class="pcinfo">${S.canWrite&&S.editing===i.id?editForm(i):`<span class="pcmem">${esc(i.member||"Photocard")}</span>${sub?`<span class="meta">${sub}</span>`:""}${+i.price?`<span class="price num">${eur(i.price)}</span>`:""}${i.notes?`<span class="meta">${esc(i.notes)}</span>`:""}${S.canWrite?acts(i):""}`}</div>
+  </article>`;
+}
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const eur=n=>new Intl.NumberFormat("es-ES",{style:"currency",currency:"EUR"}).format(n||0);
+const blob=id=>window.__photo(id);
+const initials=n=>(n||"?").trim().split(/\s+/).slice(0,2).map(w=>w[0]).join("").toUpperCase();
+try{const t=localStorage.getItem("kp-tab");if(t)S.tab=t;}catch(e){}
+const mq=window.matchMedia?matchMedia("(prefers-color-scheme: dark)"):null;
+const isDark=()=>{const t=document.documentElement.dataset.theme;return t?t==="dark":!!(mq&&mq.matches);};
+function syncThemeBtn(){const b=$("#themeBtn");if(!b)return;const d=isDark();b.textContent=d?"☀️":"🌙";const l=d?"Cambiar a modo claro":"Cambiar a modo oscuro";b.setAttribute("aria-label",l);b.title=l;}
+try{const th=localStorage.getItem("kp-theme");if(th==="dark"||th==="light")document.documentElement.dataset.theme=th;}catch(e){}
+if(mq&&mq.addEventListener)mq.addEventListener("change",syncThemeBtn);
+document.addEventListener("DOMContentLoaded",syncThemeBtn);
+
+async function shrink(file){
+  const bmp=await createImageBitmap(file);
+  const k=Math.min(1,640/Math.min(bmp.width,bmp.height));
+  const c=document.createElement("canvas");c.width=Math.round(bmp.width*k);c.height=Math.round(bmp.height*k);
+  c.getContext("2d").drawImage(bmp,0,0,c.width,c.height);
+  return await new Promise((res,rej)=>c.toBlob(b=>b?res(b):rej(new Error("encode")),"image/jpeg",.85));
+}
+async function setPhoto(gid,file){
+  if(!file||!S.assets||!S.db)return;
+  if(!file.type.startsWith("image/")){status("Elige un archivo de imagen (JPG, PNG, WEBP…).",true);return;}
+  S.uploading=gid;render();status("Subiendo foto…");
+  try{
+    let b;try{b=await shrink(file);}catch(e){b=file;}
+    const r=await S.assets.upload(b,{type:b.type||"image/jpeg"});
+    const old=(S.groups.find(g=>g.id===gid)||{}).photo;
+    await S.db.doc("groups/"+gid).update({photo:r.id});
+    if(old&&old!==r.id)S.assets.delete(old).catch(()=>{});
+    status("");
+  }catch(e){
+    const c=e&&e.code;
+    status(c==="quota_exceeded"||c==="too_large"?"La foto es demasiado grande o no queda espacio. Prueba con otra imagen.":c==="invalid_request"?"Ese formato de imagen no se puede usar. Prueba con JPG o PNG.":"No se pudo subir la foto. Inténtalo de nuevo.",true);
+  }finally{S.uploading=null;render();}
+}
+async function removePhoto(gid){
+  const g=S.groups.find(x=>x.id===gid);if(!g||!g.photo||!S.db)return;
+  const old=g.photo;
+  await write(()=>S.db.doc("groups/"+gid).update({photo:null}));
+  if(S.assets)S.assets.delete(old).catch(()=>{});
+}
+
+function stats(gid){
+  const its=S.items.filter(i=>!gid||i.groupId===gid);
+  const own=its.filter(i=>i.status==="own"),wish=its.filter(i=>i.status==="wish");
+  return{own:own.length,wish:wish.length,spent:own.reduce((a,i)=>a+(+i.price||0),0),wishCost:wish.reduce((a,i)=>a+(+i.price||0),0)};
+}
+
+const GST=[{k:"playing",l:"En progreso",ic:"▶"},{k:"pending",l:"Pendientes",ic:"⏳"},{k:"done",l:"Terminados",ic:"🏆"}];
+const fdate=t=>t?new Date(t).toLocaleDateString("es-ES",{day:"numeric",month:"short",year:"numeric"}):"";
+function setChrome(){
+  const g=S.app==="games",h=S.app==="home",C=SHELF[S.app];
+  $("#brandLabel").textContent=h?"K-pop · Juegos · Pelis · Anime · Manga":g?"Pendientes · En progreso · Terminados":C?C.label:"Álbumes · Photocards · Merch";
+  $("#brandTitle").innerHTML=h?'Mi Colección<span class="sticker">¡Hola!</span>':g?'Mis Juegos<span class="sticker">Gaming</span>':C?`${C.brand}<span class="sticker">${C.sticker}</span>`:'Mi Colección<span class="sticker">K-pop</span>';
+  document.body.dataset.app=S.app;
+  const solo=S.app!=="kpop";
+  $("#rail").hidden=solo;$("#layout").classList.toggle("solo",solo);
+  document.querySelectorAll(".appbtn").forEach(b=>b.setAttribute("aria-pressed",b.dataset.app===S.app));
+}
+function gameEdit(g){
+  return `<form class="editf" data-gedit="${g.id}">
+    <label><span class="label">Juego</span><input type="text" id="egTitle" value="${esc(g.title)}" maxlength="100"></label>
+    <label><span class="label">Plataforma</span><input type="text" id="egPlat" list="platList" value="${esc(g.platform)}" maxlength="40"></label>
+    <label><span class="label">Estado</span><select id="egStatus">${GST.map(s=>`<option value="${s.k}"${s.k===g.status?" selected":""}>${s.l.replace(/s$/,"")}</option>`).join("")}</select></label>
+    <label><span class="label">Notas</span><input type="text" id="egNotes" value="${esc(g.notes)}" maxlength="200"></label>
+    <div class="editacts"><button class="btn sm" type="submit">Guardar</button><button class="btn sm ghost" type="button" data-act="canceledit">Cancelar</button></div>
+  </form>`;
+}
+function gameCard(g){
+  const st=GST.find(x=>x.k===g.status)||GST[1],ed=S.canWrite&&S.assets;
+  const img=S.uploading==="i:"+g.id?`<span class="ph">…</span>`:g.photo?`<img src="${blob(g.photo)}" alt="Portada de ${esc(g.title)}" loading="lazy">`:`<span class="ph">${esc(initials(g.title))}</span>`;
+  const r=+g.rating||0;
+  const stars=g.status==="done"?(S.canWrite?`<div class="stars" aria-label="Nota">${[1,2,3,4,5].map(n=>`<button class="star${n<=r?" on":""}" data-act="rate" data-i="${g.id}" data-r="${n}" aria-label="${n} estrella${n>1?"s":""}">★</button>`).join("")}</div>`:r?`<div class="stars" aria-label="${r} de 5">${[1,2,3,4,5].map(n=>`<span class="star${n<=r?" on":""}">★</span>`).join("")}</div>`:""):"";
+  const when=g.status==="done"&&g.finishedAt?"Terminado el "+fdate(g.finishedAt):g.status==="playing"&&g.startedAt?"Empezado el "+fdate(g.startedAt):"";
+  const c=S.confirm==="i:"+g.id;
+  const main=g.status==="pending"?`<button class="play" data-act="gstart" data-i="${g.id}">▶ Empezar</button>`:g.status==="playing"?`<button class="got" data-act="gdone" data-i="${g.id}">🏆 ¡Terminado!</button>`:`<button data-act="gstart" data-i="${g.id}">Volver a jugar</button>`;
+  const actions=c?`<div class="acts"><span class="confirm full">¿Borrar? <button class="del" data-act="delgame" data-i="${g.id}">Sí, borrar</button><button data-act="cancel">No</button></span></div>`:`<div class="acts">${main}<span class="icons">${ed&&!g.photo?`<button class="ib" data-act="pcphoto" data-i="${g.id}" aria-label="Añadir portada" title="Añadir portada">${ICON.cam}</button>`:""}<button class="ib" data-act="gedit" data-i="${g.id}" aria-label="Editar" title="Editar">${ICON.edit}</button><button class="ib del" data-act="askitem" data-i="${g.id}" aria-label="Borrar" title="Borrar">${ICON.trash}</button></span></div>`;
+  return `<article class="pcard gcard st-${esc(g.status)}">
+    ${ed?`<button class="pcimg" data-act="pcphoto" data-i="${g.id}" aria-label="${g.photo?"Cambiar":"Añadir"} portada">${img}</button>`:`<div class="pcimg">${img}</div>`}
+    <span class="badge ${esc(g.status)}">${st.ic}</span>
+    <div class="pcinfo">${S.canWrite&&S.editing===g.id?gameEdit(g):`<span class="pcmem">${esc(g.title)}</span>${g.platform?`<span class="plat">${esc(g.platform)}</span>`:""}${stars}${g.notes?`<span class="meta">${esc(g.notes)}</span>`:""}${when?`<span class="meta">${when}</span>`:""}${S.canWrite?actions:""}`}</div>
+  </article>`;
+}
+function renderGames(){
+  setChrome();
+  const c={pending:0,playing:0,done:0};S.games.forEach(g=>{if(g.status in c)c[g.status]++;});
+  const total=S.games.length,pct=total?Math.round(c.done/total*100):0;
+  $("#totals").innerHTML=`<div class="chip done"><span class="label">Terminados</span><b class="num">${c.done}</b></div><div class="chip play"><span class="label">En progreso</span><b class="num">${c.playing}</b></div><div class="chip pend"><span class="label">Pendientes</span><b class="num">${c.pending}</b></div>`;
+  const plats=[...new Set(S.games.map(g=>(g.platform||"").trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"es"));
+  if(S.plat&&!plats.includes(S.plat))S.plat="";
+  const q=S.gq.trim().toLowerCase(),cur=GST.find(x=>x.k===S.gtab)||GST[0];
+  const key=g=>S.gtab==="done"?(g.finishedAt||g.createdAt||0):S.gtab==="playing"?(g.startedAt||g.createdAt||0):(g.createdAt||0);
+  const list=S.games.filter(g=>g.status===cur.k&&(!S.plat||(g.platform||"").trim()===S.plat)&&(!q||[g.title,g.platform,g.notes].join(" ").toLowerCase().includes(q))).sort((a,b)=>key(b)-key(a));
+  setMain(`<section class="page" style="--c:var(--play)">
+    <div class="banner">
+      <h2>Mis juegos</h2>
+      <p class="gsub">${total?`Has terminado ${c.done} de ${total} juego${total>1?"s":""} (${pct}%)`:"Apunta lo que estás jugando, lo que tienes pendiente y lo que ya has terminado."}</p>
+      ${total?`<div class="gprog" role="progressbar" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100"><span style="width:${pct}%"></span></div>`:""}
+    </div>
+    <div class="tabsbar">
+      <div class="tabs" role="tablist">${GST.map(s=>`<button class="tab" role="tab" data-gtab="${s.k}" aria-selected="${s.k===cur.k}">${s.ic} ${s.l}<span class="pill num">${c[s.k]}</span></button>`).join("")}</div>
+      <input type="text" class="search" id="gq" placeholder="Buscar juego…" value="${esc(S.gq)}" aria-label="Buscar juego">
+    </div>
+    <div class="body">
+      ${S.canWrite?`<form class="addpc" id="fGame">
+        ${S.assets?`<button type="button" class="pcpick" data-act="pickpc" aria-label="Elegir portada">${S.pcPrev?`<img src="${S.pcPrev}" alt="Vista previa">`:`<span>＋<small>Portada</small></span>`}</button>`:""}
+        <div class="pcfields">
+          <label class="full"><span class="label">Juego</span><input type="text" id="nTitle" placeholder="p. ej. Hollow Knight: Silksong" maxlength="100" required></label>
+          <label><span class="label">Plataforma</span><input type="text" id="nPlat" list="platList" placeholder="PS5, Switch, PC…" maxlength="40"></label>
+          <label><span class="label">Notas</span><input type="text" id="nNotes" maxlength="200" placeholder="Capítulo, horas, platino…"></label>
+          <button class="btn full" type="submit" ${S.pcBusy?"disabled":""}>${S.pcBusy?"Subiendo…":"Añadir a "+cur.l}</button>
+        </div>
+      </form>`:`<p class="ro">Estás viendo la lista en modo lectura.</p>`}
+      ${plats.length>1?`<div class="mchips" aria-label="Filtrar por plataforma"><button class="mchip" data-pf="" aria-pressed="${!S.plat}">Todas</button>${plats.map(p=>`<button class="mchip" data-pf="${esc(p)}" aria-pressed="${S.plat===p}">${esc(p)}</button>`).join("")}</div>`:""}
+      ${list.length?`<div class="pcgrid">${list.map(gameCard).join("")}</div>`:`<div class="empty"><span class="sleeve"></span><h3>${q||S.plat?"Nada coincide con el filtro":cur.k==="done"?"Aún no has terminado ningún juego":cur.k==="playing"?"No estás jugando a nada ahora mismo":"No tienes juegos pendientes"}</h3><p>${q||S.plat?"Prueba con otra palabra o elige «Todas».":cur.k==="done"?"Cuando acabes uno, pulsa «¡Terminado!» en En progreso y ponle nota.":"Añade uno arriba con su portada y su plataforma."}</p></div>`}
+    </div>
+  </section>`);
+}
+const SHELF={
+  media:{col:"media",icon:"🎬",h2:"Pelis y series",brand:"Pelis y Series",sticker:"Cine",color:"var(--cine)",
+    st:{watching:{l:"Viendo",one:"Viendo",ic:"▶"},pending:{l:"Pendientes",one:"Pendiente",ic:"⏳"},done:{l:"Vistas",one:"Vista",ic:"✅"}},
+    types:[["movie","Película","🎞️ Películas","películas"],["series","Serie","📺 Series","series"]],defType:"movie",prog:t=>t==="series",season:true,
+    plat:"Dónde verla",platPh:"Netflix, Max, cine…",list:"streamList",cur:"Capítulo actual",tot:"Episodios de la temporada",pre:"E",preTot:"",plus:"+1 cap.",plusAria:"Sumar un capítulo",
+    start:"▶ Empezar",doneBtn:"✅ ¡Vista!",again:"Volver a ver",poster:"Póster",
+    ph:t=>t==="series"?"p. ej. The Last of Us":"p. ej. Dune: Parte dos",notesPh:"Recomendada por…, con quién la veo…",
+    doneVerb:m=>m.type==="series"?"Terminaste":"Viste",doneWhen:m=>m.type==="series"?"Terminada el ":"Vista el ",startWhen:"Empezada el ",
+    label:"Pendientes · Viendo · Vistas",search:"Buscar título…",seen:"has visto",seenH:"Has visto",
+    intro:"Apunta lo que estás viendo, lo que tienes pendiente y lo que ya has visto.",
+    empty:{done:"Aún no has terminado nada",watching:"No estás viendo nada ahora mismo",pending:"No tienes nada pendiente"},
+    hintDone:"Cuando acabes una peli o serie, pulsa «¡Vista!» y ponle nota.",hintAdd:"Añade una película o serie arriba con su póster.",
+    homeNone:"Aún no has apuntado ninguna peli ni serie.",homeNow:"Viendo ahora",homeIdle:"No estás viendo nada ahora mismo.",go:"Ir a pelis y series →",
+    toastStart:"Movido a Viendo ▶",toastDone:"¡Vista! Movida a Vistas ✅",last:"¡Último capítulo!"},
+  anime:{col:"anime",icon:"🍥",h2:"Anime",brand:"Mi Anime",sticker:"Anime",color:"var(--anime)",
+    st:{watching:{l:"Viendo",one:"Viendo",ic:"▶"},pending:{l:"Pendientes",one:"Pendiente",ic:"⏳"},done:{l:"Vistos",one:"Visto",ic:"✅"}},
+    types:[["series","Serie","📺 Series","series"],["movie","Película","🎞️ Películas","películas"]],defType:"series",prog:t=>t==="series",season:true,
+    plat:"Dónde verlo",platPh:"Crunchyroll, Netflix…",list:"animeList",cur:"Episodio actual",tot:"Episodios de la temporada",pre:"E",preTot:"",plus:"+1 ep.",plusAria:"Sumar un episodio",
+    start:"▶ Empezar",doneBtn:"✅ ¡Visto!",again:"Volver a ver",poster:"Póster",
+    ph:t=>t==="series"?"p. ej. Frieren":"p. ej. Your Name",notesPh:"Estudio, opening favorito, recomendado por…",
+    doneVerb:m=>m.type==="series"?"Terminaste":"Viste",doneWhen:()=>"Visto el ",startWhen:"Empezado el ",
+    label:"Pendientes · Viendo · Vistos",search:"Buscar anime…",seen:"has visto",seenH:"Has visto",
+    intro:"Apunta el anime que estás viendo, el que tienes pendiente y el que ya has terminado.",
+    empty:{done:"Aún no has terminado ningún anime",watching:"No estás viendo ningún anime ahora mismo",pending:"No tienes anime pendiente"},
+    hintDone:"Cuando acabes uno, pulsa «¡Visto!» y ponle nota.",hintAdd:"Añade un anime arriba con su póster y sus episodios.",
+    homeNone:"Aún no has apuntado ningún anime.",homeNow:"Viendo ahora",homeIdle:"No estás viendo ningún anime ahora mismo.",go:"Ir a mi anime →",
+    toastStart:"Movido a Viendo ▶",toastDone:"¡Visto! Movido a Vistos ✅",last:"¡Último episodio!"},
+  manga:{col:"manga",icon:"📚",h2:"Manga",brand:"Mi Manga",sticker:"Manga",color:"var(--manga)",
+    st:{watching:{l:"Leyendo",one:"Leyendo",ic:"📖"},pending:{l:"Pendientes",one:"Pendiente",ic:"⏳"},done:{l:"Leídos",one:"Leído",ic:"✅"}},
+    types:[["manga","Manga","Manga","manga"],["manhwa","Manhwa","Manhwa","manhwa"],["novel","Novela ligera","Novelas ligeras","novelas ligeras"]],defType:"manga",prog:()=>true,season:false,
+    plat:"Editorial",platPh:"Norma, Planeta, Ivrea…",list:"mangaList",cur:"Tomo actual",tot:"Tomos totales",pre:"Tomo ",preTot:"Tomo ",plus:"+1 tomo",plusAria:"Sumar un tomo",
+    start:"📖 Empezar",doneBtn:"✅ ¡Leído!",again:"Volver a leer",poster:"Portada",
+    ph:()=>"p. ej. Chainsaw Man",notesPh:"Autor, dónde lo compré, edición…",
+    doneVerb:()=>"Terminaste",doneWhen:()=>"Terminado el ",startWhen:"Empezado el ",
+    label:"Pendientes · Leyendo · Leídos",search:"Buscar manga…",seen:"has leído",seenH:"Has leído",
+    intro:"Apunta el manga que estás leyendo, el que tienes pendiente y el que ya has terminado.",
+    empty:{done:"Aún no has terminado ningún manga",watching:"No estás leyendo nada ahora mismo",pending:"No tienes manga pendiente"},
+    hintDone:"Cuando lo termines, pulsa «¡Leído!» y ponle nota.",hintAdd:"Añade un manga arriba con su portada y sus tomos.",
+    homeNone:"Aún no has apuntado ningún manga.",homeNow:"Leyendo ahora",homeIdle:"No estás leyendo nada ahora mismo.",go:"Ir a mi manga →",
+    toastStart:"Movido a Leyendo 📖",toastDone:"¡Leído! Movido a Leídos ✅",last:"¡Último tomo!"}
+};
+const SKEYS=["watching","pending","done"];
+const typeL=(C,t)=>((C.types.find(x=>x[0]===t)||C.types.find(x=>x[0]===C.defType))||[,""])[1];
+const epLabel=(m,C)=>{C=C||SHELF.media;const t=m.type||C.defType;if(!C.prog(t)||!(m.season||m.episode||m.eps))return "";
+  const p=+m.eps?`${C.preTot}${+m.episode||0}/${+m.eps}`:`${C.pre}${+m.episode||0}`;return C.season?`T${m.season||1} · ${p}`:p;};
+const epFull=m=>+m.eps>0&&(+m.episode||0)>=+m.eps;
+const curShelf=()=>SHELF[S.app];
+function shelfEdit(m,C){
+  const t=S.meType||m.type||C.defType,pr=C.prog(t);
+  return `<form class="editf" data-medit="${m.id}">
+    <label><span class="label">Título</span><input type="text" id="meTitle" value="${esc(m.title)}" maxlength="100"></label>
+    <label><span class="label">Tipo</span><select id="meType">${C.types.map(([k,l])=>`<option value="${k}"${k===t?" selected":""}>${l}</option>`).join("")}</select></label>
+    <label><span class="label">${C.plat}</span><input type="text" id="mePlat" list="${C.list}" value="${esc(m.platform)}" maxlength="40"></label>
+    <label><span class="label">Estado</span><select id="meStatus">${SKEYS.map(k=>`<option value="${k}"${k===m.status?" selected":""}>${C.st[k].one}</option>`).join("")}</select></label>
+    ${pr?`${C.season?`<label><span class="label">Temporada</span><input type="number" id="meSeason" min="1" value="${+m.season||""}" placeholder="1"></label>`:""}<label><span class="label">${C.cur}</span><input type="number" id="meEp" min="0" value="${m.episode!=null&&m.episode!==""?+m.episode:""}" placeholder="0"></label><label><span class="label">${C.tot}</span><input type="number" id="meEps" min="1" value="${+m.eps||""}" placeholder="p. ej. 11"></label>`:""}
+    <label><span class="label">Notas</span><input type="text" id="meNotes" value="${esc(m.notes)}" maxlength="200"></label>
+    <div class="editacts"><button class="btn sm" type="submit">Guardar</button><button class="btn sm ghost" type="button" data-act="canceledit">Cancelar</button></div>
+  </form>`;
+}
+function shelfCard(m,C){
+  const st=C.st[m.status]||C.st.pending,ed=S.canWrite&&S.assets,t=m.type||C.defType;
+  const img=S.uploading==="i:"+m.id?`<span class="ph">…</span>`:m.photo?`<img src="${blob(m.photo)}" alt="${C.poster} de ${esc(m.title)}" loading="lazy">`:`<span class="ph">${esc(initials(m.title))}</span>`;
+  const r=+m.rating||0;
+  const stars=m.status==="done"?(S.canWrite?`<div class="stars" aria-label="Nota">${[1,2,3,4,5].map(n=>`<button class="star${n<=r?" on":""}" data-act="mrate" data-i="${m.id}" data-r="${n}" aria-label="${n} estrella${n>1?"s":""}">★</button>`).join("")}</div>`:r?`<div class="stars" aria-label="${r} de 5">${[1,2,3,4,5].map(n=>`<span class="star${n<=r?" on":""}">★</span>`).join("")}</div>`:""):"";
+  const when=m.status==="done"&&m.finishedAt?C.doneWhen(m)+fdate(m.finishedAt):m.status==="watching"&&m.startedAt?C.startWhen+fdate(m.startedAt):"";
+  const ep=epLabel(m,C),pr=C.prog(t),full=epFull(m);
+  const epBtn=S.canWrite&&m.status==="watching"&&!full?`<button class="epbtn" data-act="mep" data-i="${m.id}" aria-label="${C.plusAria}">${C.plus}</button>`:"";
+  const eprow=pr&&(ep||m.status==="watching")?`<span class="eprow${full?" full":""}"><span class="epl">${full?"✓ ":""}${ep||"Sin empezar"}</span>${epBtn}</span>${+m.eps?`<span class="epbar" role="progressbar" aria-valuenow="${Math.min(+m.episode||0,+m.eps)}" aria-valuemin="0" aria-valuemax="${+m.eps}"><span style="width:${Math.min(100,Math.round((+m.episode||0)/(+m.eps)*100))}%"></span></span>`:""}`:"";
+  const c=S.confirm==="i:"+m.id;
+  const main=m.status==="pending"?`<button class="watch" data-act="mstart" data-i="${m.id}">${C.start}</button>`:m.status==="watching"?`<button class="got" data-act="mdone" data-i="${m.id}">${C.doneBtn}</button>`:`<button data-act="mstart" data-i="${m.id}">${C.again}</button>`;
+  const actions=c?`<div class="acts"><span class="confirm full">¿Borrar? <button class="del" data-act="delmedia" data-i="${m.id}">Sí, borrar</button><button data-act="cancel">No</button></span></div>`:`<div class="acts">${main}<span class="icons">${ed&&!m.photo?`<button class="ib" data-act="pcphoto" data-i="${m.id}" aria-label="Añadir ${C.poster.toLowerCase()}" title="Añadir ${C.poster.toLowerCase()}">${ICON.cam}</button>`:""}<button class="ib" data-act="medit" data-i="${m.id}" aria-label="Editar" title="Editar">${ICON.edit}</button><button class="ib del" data-act="askitem" data-i="${m.id}" aria-label="Borrar" title="Borrar">${ICON.trash}</button></span></div>`;
+  return `<article class="pcard gcard mcard st-${esc(m.status)}">
+    ${ed?`<button class="pcimg" data-act="pcphoto" data-i="${m.id}" aria-label="${m.photo?"Cambiar":"Añadir"} ${C.poster.toLowerCase()}">${img}</button>`:`<div class="pcimg">${img}</div>`}
+    <span class="badge ${esc(m.status)}">${st.ic}</span>
+    <div class="pcinfo">${S.canWrite&&S.editing===m.id?shelfEdit(m,C):`<span class="pcmem">${esc(m.title)}</span><span class="chiprow"><span class="plat">${typeL(C,t)}</span>${m.platform?`<span class="plat">${esc(m.platform)}</span>`:""}</span>${eprow}${stars}${m.notes?`<span class="meta">${esc(m.notes)}</span>`:""}${when?`<span class="meta">${when}</span>`:""}${S.canWrite?actions:""}`}</div>
+  </article>`;
+}
+function renderShelf(key){
+  setChrome();
+  const C=SHELF[key],sh=S.shs[key],all=S[C.col];
+  const c={pending:0,watching:0,done:0};all.forEach(m=>{if(m.status in c)c[m.status]++;});
+  $("#totals").innerHTML=`<div class="chip done"><span class="label">${C.st.done.l}</span><b class="num">${c.done}</b></div><div class="chip cine"><span class="label">${C.st.watching.l}</span><b class="num">${c.watching}</b></div><div class="chip pend"><span class="label">${C.st.pending.l}</span><b class="num">${c.pending}</b></div>`;
+  const plats=[...new Set(all.map(m=>(m.platform||"").trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"es"));
+  if(sh.plat&&!plats.includes(sh.plat))sh.plat="";
+  const q=sh.q.trim().toLowerCase(),cur=SKEYS.includes(sh.tab)?sh.tab:"watching",CS=C.st[cur];
+  const key2=m=>cur==="done"?(m.finishedAt||m.createdAt||0):cur==="watching"?(m.startedAt||m.createdAt||0):(m.createdAt||0);
+  const typeOk=m=>!sh.type||(m.type||C.defType)===sh.type;
+  const list=all.filter(m=>m.status===cur&&typeOk(m)&&(!sh.plat||(m.platform||"").trim()===sh.plat)&&(!q||[m.title,m.platform,m.notes].join(" ").toLowerCase().includes(q))).sort((a,b)=>key2(b)-key2(a));
+  const ft=sh.form||C.defType,pr=C.prog(ft);
+  const total=all.length,pct=total?Math.round(c.done/total*100):0;
+  const byType=C.types.map(([k,sg,,pl])=>{const n=all.filter(m=>(m.type||C.defType)===k).length;return n?`${n} ${n===1?sg.toLowerCase():pl}`:"";}).filter(Boolean).join(" · ");
+  const typeChips=[["","Todo"],...C.types.map(([k,,pl])=>[k,pl])];
+  const filtered=q||sh.plat||sh.type;
+  setMain(`<section class="page" style="--c:${C.color}">
+    <div class="banner">
+      <h2>${C.h2}</h2>
+      <p class="gsub">${total?`${byType} · ${C.seen} ${c.done} de ${total}`:C.intro}</p>
+      ${total?`<div class="gprog" role="progressbar" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100"><span style="width:${pct}%"></span></div>`:""}
+    </div>
+    <div class="tabsbar">
+      <div class="tabs" role="tablist">${SKEYS.map(k=>`<button class="tab" role="tab" data-mtab="${k}" aria-selected="${k===cur}">${C.st[k].ic} ${C.st[k].l}<span class="pill num">${c[k]}</span></button>`).join("")}</div>
+      <input type="text" class="search" id="mq" placeholder="${C.search}" value="${esc(sh.q)}" aria-label="${C.search}">
+    </div>
+    <div class="body">
+      ${S.canWrite?`<form class="addpc" id="fMedia">
+        ${S.assets?`<button type="button" class="pcpick" data-act="pickpc" aria-label="Elegir ${C.poster.toLowerCase()}">${S.pcPrev?`<img src="${S.pcPrev}" alt="Vista previa">`:`<span>＋<small>${C.poster}</small></span>`}</button>`:""}
+        <div class="pcfields">
+          <label class="full"><span class="label">Título</span><input type="text" id="mTitle" placeholder="${C.ph(ft)}" maxlength="100" required></label>
+          <label><span class="label">Tipo</span><select id="mType">${C.types.map(([k,l])=>`<option value="${k}"${k===ft?" selected":""}>${l}</option>`).join("")}</select></label>
+          <label><span class="label">${C.plat}</span><input type="text" id="mPlat" list="${C.list}" placeholder="${C.platPh}" maxlength="40"></label>
+          ${pr?`${C.season?`<label><span class="label">Temporada</span><input type="number" id="mSeason" min="1" placeholder="1" inputmode="numeric"></label>`:""}<label><span class="label">${C.cur}</span><input type="number" id="mEp" min="0" placeholder="0" inputmode="numeric"></label><label class="${C.season?"full":""}"><span class="label">${C.tot}</span><input type="number" id="mEps" min="1" placeholder="p. ej. 11" inputmode="numeric"></label>`:""}
+          <label class="full"><span class="label">Notas</span><input type="text" id="mNotes" maxlength="200" placeholder="${C.notesPh}"></label>
+          <button class="btn full" type="submit" ${S.pcBusy?"disabled":""}>${S.pcBusy?"Subiendo…":"Añadir a "+CS.l}</button>
+        </div>
+      </form>`:`<p class="ro">Estás viendo la lista en modo lectura.</p>`}
+      <div class="mchips" aria-label="Filtrar por tipo">${typeChips.map(([k,l])=>`<button class="mchip" data-mt="${k}" aria-pressed="${sh.type===k}">${l}</button>`).join("")}</div>
+      ${plats.length>1?`<div class="mchips" aria-label="Filtrar por ${C.plat.toLowerCase()}"><button class="mchip" data-mpf="" aria-pressed="${!sh.plat}">Todas</button>${plats.map(p=>`<button class="mchip" data-mpf="${esc(p)}" aria-pressed="${sh.plat===p}">${esc(p)}</button>`).join("")}</div>`:""}
+      ${list.length?`<div class="pcgrid">${list.map(m=>shelfCard(m,C)).join("")}</div>`:`<div class="empty"><span class="sleeve"></span><h3>${filtered?"Nada coincide con el filtro":C.empty[cur]}</h3><p>${filtered?"Prueba con otra palabra o elige «Todo».":cur==="done"?C.hintDone:C.hintAdd}</p></div>`}
+    </div>
+  </section>`);
+}
+function homeShelf(key,thumb){
+  const C=SHELF[key],all=S[C.col];
+  const mc={pending:0,watching:0,done:0};all.forEach(m=>{if(m.status in mc)mc[m.status]++;});
+  const mt=all.length,mp=mt?Math.round(mc.done/mt*100):0;
+  const now=all.filter(m=>m.status==="watching").sort((a,b)=>(b.startedAt||0)-(a.startedAt||0)).slice(0,6);
+  return `<article class="hcard" style="--c:${C.color}">
+    <div class="banner"><span class="label">${C.h2}</span><h2>${C.icon} ${C.h2}</h2>
+      <p class="gsub">${mt?`${C.seenH} ${mc.done} de ${mt} (${mp}%)`:C.homeNone}</p>
+      ${mt?`<div class="gprog" role="progressbar" aria-valuenow="${mp}" aria-valuemin="0" aria-valuemax="100"><span style="width:${mp}%"></span></div>`:""}
+    </div>
+    <div class="hbody">
+      <div class="stats"><div class="chip cine"><span class="label">${C.st.watching.l}</span><b class="num">${mc.watching}</b></div><div class="chip pend"><span class="label">${C.st.pending.l}</span><b class="num">${mc.pending}</b></div><div class="chip done"><span class="label">${C.st.done.l}</span><b class="num">${mc.done}</b></div></div>
+      ${now.length?`<div><span class="label">${C.homeNow}</span><div class="nowrow">${now.map(m=>`<button class="nowg nowm" data-hsh="${key}" data-hst="watching"><span class="cv">${thumb(m.photo,m.title)}</span><span class="t">${esc(m.title)}${epLabel(m,C)?" · "+epLabel(m,C):""}</span></button>`).join("")}</div></div>`:`<p class="meta">${C.homeIdle}</p>`}
+      <button class="btn" data-app="${key}">${C.go}</button>
+    </div>
+  </article>`;
+}
+function ago(t){
+  if(!t)return "";const d0=new Date();d0.setHours(0,0,0,0);const d=new Date(t);d.setHours(0,0,0,0);
+  const n=Math.round((d0-d)/864e5);return n<=0?"hoy":n===1?"ayer":n<7?`hace ${n} días`:fdate(t);
+}
+function renderHome(){
+  setChrome();
+  $("#totals").innerHTML="";
+  const t=stats();
+  const groups=[...S.groups].sort((a,b)=>a.name.localeCompare(b.name,"es"));
+  const c={pending:0,playing:0,done:0};S.games.forEach(g=>{if(g.status in c)c[g.status]++;});
+  const total=S.games.length,pct=total?Math.round(c.done/total*100):0;
+  const playing=S.games.filter(g=>g.status==="playing").sort((a,b)=>(b.startedAt||0)-(a.startedAt||0)).slice(0,6);
+  const grp=id=>S.groups.find(g=>g.id===id)||{};
+  const thumb=(photo,txt)=>photo?`<img src="${blob(photo)}" alt="" loading="lazy">`:esc(initials(txt));
+  const recent=[
+    ...S.items.map(i=>({t:(i.status==="own"&&i.boughtAt)||i.createdAt||0,k:"i",x:i})),
+    ...S.games.map(g=>({t:Math.max(g.createdAt||0,g.startedAt||0,g.finishedAt||0),k:"g",x:g})),
+    ...Object.keys(SHELF).flatMap(k=>S[SHELF[k].col].map(m=>({t:Math.max(m.createdAt||0,m.startedAt||0,m.finishedAt||0),k:"m",sh:k,x:m})))
+  ].filter(r=>r.t).sort((a,b)=>b.t-a.t).slice(0,6);
+  const rRow=r=>{
+    if(r.k==="i"){const i=r.x,g=grp(i.groupId),pc=isPc(i),nm=pc?(i.member||"Photocard")+(i.name?" · "+i.name:""):i.name;
+      const verb=i.status==="own"&&i.boughtAt===r.t?"Conseguiste":i.status==="own"?"Añadiste a Tengo":"Añadiste a Quiero";
+      return `<li><button class="rbtn" data-hg="${esc(i.groupId)}" data-hsec="${pc?"pc":"merch"}" data-htab="${esc(i.status)}"><span class="rth">${thumb(i.photo||g.photo,nm)}</span><span class="rtx"><b>${esc(nm)}</b><small>${verb} · ${esc(g.name||"")} · ${pc?"Photocard":esc(i.kind)}</small></span><span class="rwhen">${ago(r.t)}</span></button></li>`;}
+    if(r.k==="m"){const C=SHELF[r.sh],m=r.x,verb=m.status==="done"&&m.finishedAt===r.t?C.doneVerb(m):m.status==="watching"&&m.startedAt===r.t?"Empezaste":"Añadiste a "+((C.st[m.status]||{}).l||C.h2);
+      return `<li><button class="rbtn" data-hsh="${r.sh}" data-hst="${esc(m.status)}"><span class="rth">${thumb(m.photo,m.title)}</span><span class="rtx"><b>${esc(m.title)}</b><small>${verb} · ${C.icon} ${typeL(C,m.type||C.defType)}${m.platform?" · "+esc(m.platform):""}</small></span><span class="rwhen">${ago(r.t)}</span></button></li>`;}
+    const g=r.x,verb=g.status==="done"&&g.finishedAt===r.t?"Terminaste":g.status==="playing"&&g.startedAt===r.t?"Empezaste":"Añadiste a "+((GST.find(s=>s.k===g.status)||{}).l||"Juegos");
+    return `<li><button class="rbtn" data-hgt="${esc(g.status)}"><span class="rth">${thumb(g.photo,g.title)}</span><span class="rtx"><b>${esc(g.title)}</b><small>${verb}${g.platform?" · "+esc(g.platform):""}</small></span><span class="rwhen">${ago(r.t)}</span></button></li>`;
+  };
+  setMain(`<div class="home">
+    <article class="hcard" style="--c:var(--accent)">
+      <div class="banner"><span class="label">Colección</span><h2>💿 K-pop</h2>
+        ${groups.length?`<div class="avs">${groups.slice(0,8).map(g=>`<button class="hav" data-hg="${g.id}" style="--c:${esc(g.color)}" title="${esc(g.name)}" aria-label="Abrir ${esc(g.name)}">${thumb(g.photo,g.name)}</button>`).join("")}${groups.length>8?`<span class="more">+${groups.length-8}</span>`:""}</div>`:`<p class="gsub">Aún no tienes grupos. Crea el primero desde K-pop.</p>`}
+      </div>
+      <div class="hbody">
+        <div class="stats"><div class="chip"><span class="label">Grupos</span><b class="num">${groups.length}</b></div><div class="chip own"><span class="label">Tengo</span><b class="num">${t.own}</b></div><div class="chip wish"><span class="label">Quiero</span><b class="num">${t.wish}</b></div><div class="chip"><span class="label">Gastado</span><b class="num">${eur(t.spent)}</b></div></div>
+        ${t.wishCost?`<p class="meta">Te faltan ${eur(t.wishCost)} para completar tu lista de deseos.</p>`:""}
+        <button class="btn" data-app="kpop">Ir a mi colección →</button>
+      </div>
+    </article>
+    <article class="hcard" style="--c:var(--play)">
+      <div class="banner"><span class="label">Juegos</span><h2>🎮 Mis juegos</h2>
+        <p class="gsub">${total?`Has terminado ${c.done} de ${total} (${pct}%)`:"Aún no has apuntado ningún juego."}</p>
+        ${total?`<div class="gprog" role="progressbar" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100"><span style="width:${pct}%"></span></div>`:""}
+      </div>
+      <div class="hbody">
+        <div class="stats"><div class="chip play"><span class="label">En progreso</span><b class="num">${c.playing}</b></div><div class="chip pend"><span class="label">Pendientes</span><b class="num">${c.pending}</b></div><div class="chip done"><span class="label">Terminados</span><b class="num">${c.done}</b></div></div>
+        ${playing.length?`<div><span class="label">Jugando ahora</span><div class="nowrow">${playing.map(g=>`<button class="nowg" data-hgt="playing"><span class="cv">${thumb(g.photo,g.title)}</span><span class="t">${esc(g.title)}</span></button>`).join("")}</div></div>`:`<p class="meta">No estás jugando a nada ahora mismo.</p>`}
+        <button class="btn" data-app="games" style="background:var(--play);box-shadow:0 6px 16px -8px var(--play);color:var(--surface)">Ir a mis juegos →</button>
+      </div>
+    </article>
+    ${["media","anime","manga"].map(k=>homeShelf(k,thumb)).join("")}
+  </div>
+  <section class="recent"><h3>Actividad reciente</h3>${recent.length?`<ul>${recent.map(rRow).join("")}</ul>`:`<p class="meta" style="margin:8px 0 0;color:var(--muted)">Aquí verás lo último que añadas, consigas o termines.</p>`}</section>`);
+}
+function render(){
+  if(S.app==="home"){renderHome();return;}
+  if(S.app==="games"){renderGames();return;}
+  if(SHELF[S.app]){renderShelf(S.app);return;}
+  setChrome();
+  const t=stats();
+  $("#totals").innerHTML=`<div class="chip own"><span class="label">Tengo</span><b class="num">${t.own}</b></div><div class="chip wish"><span class="label">Quiero</span><b class="num">${t.wish}</b></div><div class="chip"><span class="label">Gastado</span><b class="num">${eur(t.spent)}</b></div>`;
+  const groups=[...S.groups].sort((a,b)=>a.name.localeCompare(b.name,"es"));
+  if(S.sel&&!groups.find(g=>g.id===S.sel))S.sel=null;
+  if(!S.sel&&groups.length)S.sel=groups[0].id;
+
+  let rail=(groups.length?`<span class="label">Mis grupos</span>`:"")+groups.map(g=>{const s=stats(g.id);return `<button class="gbtn" data-g="${g.id}" aria-current="${g.id===S.sel}" style="--c:${esc(g.color)}">${g.photo?`<img class="av" src="${blob(g.photo)}" alt="" loading="lazy">`:`<span class="av">${esc(initials(g.name))}</span>`}<span class="gname">${esc(g.name)}</span><span class="gcount num">${s.own}/${s.own+s.wish}</span></button>`}).join("");
+  if(S.canWrite){
+    rail+=`<details class="addwrap" id="addWrap"${!groups.length||S.addOpen?" open":""}><summary>＋ Nuevo grupo</summary><form class="addgroup" id="fGroup"><input type="text" id="gName" placeholder="p. ej. Stray Kids" maxlength="40" required>${S.assets?`<label class="filelab">Foto (opcional)<input type="file" id="gPhoto" accept="image/*"></label>`:""}<span class="swhint">Color del grupo</span><div class="swatches">${COLORS.map(c=>`<button type="button" class="sw" data-c="${c}" style="--c:${c}" aria-label="Color ${c}" aria-pressed="${c===S.color}"></button>`).join("")}<label class="swc${COLORS.includes(S.color)?"":" on"}" title="Elegir otro color" style="--cc:${COLORS.includes(S.color)?"transparent":esc(S.color)}">＋<input type="color" id="gColor" value="${esc(S.color)}" aria-label="Elegir otro color"></label></div><button class="btn sm" type="submit">Añadir grupo</button></form></details>`;
+  }
+  const gn=$("#gName"),gnv=gn?gn.value:"",gnf=gn&&document.activeElement===gn;
+  $("#rail").innerHTML=rail;
+  const gn2=$("#gName");if(gn2&&gnv){gn2.value=gnv;}if(gn2&&gnf)gn2.focus();
+
+  const g=groups.find(x=>x.id===S.sel);
+  if(!g){
+    setMain(S.ready?`<section class="welcome"><h2>Empieza tu colección</h2><p>Cada grupo tiene dos listas: lo que ya <b>tienes</b> y lo que <b>quieres</b> conseguir.</p><ol><li>Añade un grupo en «Nuevo grupo», elige su color y su foto.</li><li>Apunta álbumes, photocards o merch en «Quiero».</li><li>Cuando lo compres, pulsa <b>¡Conseguido!</b> y pasa a «Tengo» con su precio.</li></ol>${S.canWrite?"":`<p class="ro">Estás viendo la colección en modo lectura.</p>`}</section>`:"");
+    return;
+  }
+  const s=stats(g.id);
+  const q=S.q.trim().toLowerCase();
+  const pcSec=S.sec==="pc";
+  const gi=S.items.filter(i=>i.groupId===g.id);
+  const nPc=gi.filter(isPc).length,nM=gi.length-nPc;
+  const inSec=gi.filter(i=>isPc(i)===pcSec);
+  const cW=inSec.filter(i=>i.status==="wish").length,cO=inSec.length-cW;
+  const members=[...new Set(gi.filter(isPc).map(i=>(i.member||"").trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"es"));
+  if(S.member&&!members.includes(S.member))S.member="";
+  const list=inSec.filter(i=>i.status===S.tab&&(!pcSec||!S.member||(i.member||"").trim()===S.member)&&(!q||[i.name,i.version,i.kind,i.notes,i.member].join(" ").toLowerCase().includes(q))).sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+  const own=S.tab==="own";
+  const conf=S.confirm;
+  const edit=S.canWrite&&S.assets;
+  const pcInner=S.uploading===g.id?`<span class="in"><span class="hint">Subiendo…</span></span>`:g.photo?`<span class="in"><img src="${blob(g.photo)}" alt="Foto de ${esc(g.name)}"></span>`:`<span class="in"><span>${esc(initials(g.name))}${edit?`<span class="hint">+ foto</span>`:""}</span></span>`;
+  setMain(`<section class="page" style="--c:${esc(g.color)}">
+    <div class="banner">
+      ${g.photo?`<img class="bg" src="${blob(g.photo)}" alt="">`:""}
+      <div class="bannerrow">
+        ${edit?`<button class="pc" data-act="pickphoto" aria-label="${g.photo?"Cambiar foto":"Añadir foto"} de ${esc(g.name)}">${pcInner}</button>`:`<div class="pc">${pcInner}</div>`}
+        <div class="gtitle">
+          ${S.canWrite&&S.gedit===g.id?`<form class="gedit" data-grp="${g.id}">
+            <label><span class="label">Nombre del grupo</span><input type="text" id="grName" value="${esc(g.name)}" maxlength="40" required></label>
+            <span class="swhint">Color del grupo</span>
+            <div class="swatches">${COLORS.map(c=>`<button type="button" class="sw" data-gc="${c}" style="--c:${c}" aria-label="Color ${c}" aria-pressed="${c===S.gcolor}"></button>`).join("")}<label class="swc${COLORS.includes(S.gcolor)?"":" on"}" title="Elegir otro color" style="--cc:${COLORS.includes(S.gcolor)?"transparent":esc(S.gcolor)}">＋<input type="color" id="grColor" value="${esc(S.gcolor)}" aria-label="Elegir otro color"></label></div>
+            <div class="editacts"><button class="btn sm" type="submit">Guardar</button><button class="btn sm ghost" type="button" data-act="cancelgedit">Cancelar</button></div>
+          </form>`:`<h2>${esc(g.name)}</h2>`}
+          <div class="stats">
+            <div class="chip own"><span class="label">Tengo</span><b class="num">${s.own}</b></div>
+            <div class="chip wish"><span class="label">Quiero</span><b class="num">${s.wish}</b></div>
+            <div class="chip"><span class="label">Gastado</span><b class="num">${eur(s.spent)}</b></div>
+            ${s.wishCost?`<div class="chip"><span class="label">Falta</span><b class="num">${eur(s.wishCost)}</b></div>`:""}
+          </div>
+          ${S.canWrite&&S.gedit!==g.id?`<div class="photoacts">
+            <button class="link" data-act="editgroup">Editar nombre y color</button>
+            ${edit?`<button class="link" data-act="pickphoto">${g.photo?"Cambiar foto":"Añadir foto"}</button>${g.photo?`<button class="link" data-act="rmphoto">Quitar foto</button>`:""}`:""}
+            ${conf==="g:"+g.id?`<span class="confirm">¿Borrar el grupo y sus ${s.own+s.wish} cosas? <button class="btn sm" data-act="delgroup">Sí, borrar</button><button class="btn sm ghost" data-act="cancel">Cancelar</button></span>`:`<button class="link danger" data-act="askgroup">Borrar grupo</button>`}
+          </div>`:""}
+        </div>
+      </div>
+    </div>
+    <div class="sections">
+      <button class="secbtn" data-sec="merch" aria-pressed="${!pcSec}"><span class="ic">💿</span>Álbumes y merch<span class="pill num">${nM}</span></button>
+      <button class="secbtn" data-sec="pc" aria-pressed="${pcSec}"><span class="ic">🃏</span>Photocards<span class="pill num">${nPc}</span></button>
+    </div>
+    <div class="tabsbar">
+      <div class="tabs" role="tablist">
+        <button class="tab" role="tab" data-tab="wish" aria-selected="${!own}">♡ Quiero<span class="pill num">${cW}</span></button>
+        <button class="tab" role="tab" data-tab="own" aria-selected="${own}">✓ Tengo<span class="pill num">${cO}</span></button>
+      </div>
+      <input type="text" class="search" id="q" placeholder="Buscar en esta lista…" value="${esc(S.q)}" aria-label="Buscar">
+    </div>
+    <div class="body">
+      ${S.canWrite&&pcSec?pcForm(own):S.canWrite?`<form class="additem" id="fItem">
+        ${S.assets?`<button type="button" class="pcpick" data-act="pickpc" aria-label="Elegir foto">${S.pcPrev?`<img src="${S.pcPrev}" alt="Vista previa">`:`<span>＋<small>Foto</small></span>`}</button>`:""}
+        <div class="mfields">
+        <label class="name"><span class="label">${own?"Qué tienes":"Qué quieres"}</span><input type="text" id="iName" placeholder="p. ej. 5-STAR (Limited)" maxlength="80" required></label>
+        <label><span class="label">Tipo</span><select id="iKind">${KINDS.map(k=>`<option>${k}</option>`).join("")}</select></label>
+        <label><span class="label">Versión</span><input type="text" id="iVer" placeholder="Ver. A, Digipack…" maxlength="60"></label>
+        <label><span class="label">Precio €</span><input type="number" id="iPrice" min="0" step="0.01" inputmode="decimal" placeholder="0"></label>
+        <button class="btn" type="submit" ${S.pcBusy?"disabled":""}>${S.pcBusy?"Subiendo…":"Añadir"}</button>
+        <label class="full"><span class="label">Notas (tienda, fecha, preventa…)</span><input type="text" id="iNotes" maxlength="200"></label>
+        </div>
+      </form>`:`<p class="ro">Estás viendo la colección en modo lectura.</p>`}
+      ${pcSec&&members.length?`<div class="mchips" aria-label="Filtrar por miembro"><button class="mchip" data-m="" aria-pressed="${!S.member}">Todos</button>${members.map(m=>`<button class="mchip" data-m="${esc(m)}" aria-pressed="${S.member===m}">${esc(m)}</button>`).join("")}</div>`:""}
+      ${list.length?`<div class="${pcSec?"pcgrid":"items"}">${list.map(pcSec?pcCard:card).join("")}</div>`:`<div class="empty"><span class="sleeve"></span><h3>${q||S.member&&pcSec?"Nada coincide con el filtro":pcSec?(own?"Aún no tienes photocards apuntadas":"No hay photocards en tu lista de deseos"):own?"Aún no has apuntado nada que tengas":"Tu lista de deseos está vacía"}</h3><p>${q||S.member&&pcSec?"Prueba con otra palabra o elige «Todos».":pcSec?"Sube la foto de la photocard arriba, con el miembro y el álbum.":own?"Añádelo arriba o marca algo de «Quiero» como ¡Conseguido!":"Apunta arriba el próximo álbum o merch que quieras de "+esc(g.name)+"."}</p></div>`}
+    </div>
+  </section>`);
+}
+
+function card(i){
+  const own=i.status==="own",c=S.confirm==="i:"+i.id;
+  const meta=[i.version,i.notes].filter(Boolean).map(esc).join(" · ");
+  const up=S.uploading==="i:"+i.id,ed=S.canWrite&&S.assets;
+  const pic=up?`<span class="ph">Subiendo…</span>`:i.photo?`<img src="${blob(i.photo)}" alt="${esc(i.name)}" loading="lazy">`:"";
+  return `<article class="card ${own?"own":"wish"}">
+    ${pic?(ed?`<button class="cimg" data-act="pcphoto" data-i="${i.id}" aria-label="Cambiar foto">${pic}</button>`:`<div class="cimg">${pic}</div>`):""}
+    ${S.canWrite&&S.editing===i.id?editForm(i):`<div class="top"><span class="kind">${esc(i.kind)}</span>${+i.price?`<span class="price num">${eur(i.price)}</span>`:""}</div>
+    <span class="title">${esc(i.name)}</span>
+    ${meta?`<span class="meta">${meta}</span>`:""}
+    ${S.canWrite?acts(i,ed&&!i.photo&&!up):""}`}
+  </article>`;
+}
+
+function status(msg,warn){const el=$("#status");el.textContent=msg||"";el.hidden=!msg;el.classList.toggle("warn",!!warn);}
+async function write(fn){
+  try{await fn();}catch(e){
+    if(e&&e.code==="invalid_argument"){S.canWrite=false;render();status("No tienes permiso para editar esta colección.",true);}
+    else if(e&&e.code==="quota_exceeded")status("La colección está llena: borra algunas cosas para añadir más.",true);
+    else status("No se pudo guardar. Revisa la conexión e inténtalo de nuevo.",true);
+  }
+}
+
+document.addEventListener("click",e=>{
+  const b=e.target.closest("button");if(!b)return;
+  if(b.id==="themeBtn"){const n=isDark()?"light":"dark";document.documentElement.dataset.theme=n;try{localStorage.setItem("kp-theme",n)}catch(e){}syncThemeBtn();return;}
+  if(b.dataset.g){S.gedit=null;S.sel=b.dataset.g;S.q="";S.member="";S.confirm=null;$("#main").innerHTML="";render();return;}
+  if(b.dataset.hg){S.sel=b.dataset.hg;S.q="";S.member="";if(b.dataset.hsec)S.sec=b.dataset.hsec;if(b.dataset.htab)S.tab=b.dataset.htab;goApp("kpop");return;}
+  if(b.dataset.hsh){const k=b.dataset.hsh,sh=S.shs[k];if(sh){if(b.dataset.hst)sh.tab=b.dataset.hst;sh.plat="";sh.type="";}goApp(k);return;}
+  if(b.dataset.mtab&&S.shs[S.app]){S.shs[S.app].tab=b.dataset.mtab;S.confirm=null;S.editing=null;render();return;}
+  if(b.dataset.mt!==undefined&&S.shs[S.app]){S.shs[S.app].type=b.dataset.mt;render();return;}
+  if(b.dataset.mpf!==undefined&&S.shs[S.app]){S.shs[S.app].plat=b.dataset.mpf;render();return;}
+  if(b.dataset.hgt){S.gtab=b.dataset.hgt;S.plat="";goApp("games");return;}
+  if(b.dataset.app){goApp(b.dataset.app);return;}
+  if(b.dataset.gtab){S.gtab=b.dataset.gtab;S.confirm=null;S.editing=null;try{localStorage.setItem("kp-gtab",S.gtab)}catch(e){}render();return;}
+  if(b.dataset.pf!==undefined){S.plat=b.dataset.pf;render();return;}
+  if(b.dataset.sec){S.sec=b.dataset.sec;S.member="";clearPc();S.confirm=null;try{localStorage.setItem("kp-sec",S.sec)}catch(e){}$("#main").innerHTML="";render();return;}
+  if(b.dataset.m!==undefined){S.member=b.dataset.m;render();return;}
+  if(b.dataset.gc){S.gcolor=b.dataset.gc;document.querySelectorAll(".gedit .sw").forEach(x=>x.setAttribute("aria-pressed",x.dataset.gc===S.gcolor));const sc=$(".gedit .swc");if(sc){sc.classList.remove("on");sc.style.setProperty("--cc","transparent");}return;}
+  if(b.dataset.c){S.color=b.dataset.c;document.querySelectorAll(".sw").forEach(x=>x.setAttribute("aria-pressed",x.dataset.c===S.color));const sc=$(".swc");if(sc){sc.classList.remove("on");sc.style.setProperty("--cc","transparent");}return;}
+  if(b.dataset.tab){S.tab=b.dataset.tab;S.confirm=null;try{localStorage.setItem("kp-tab",S.tab)}catch(e){}render();return;}
+  const a=b.dataset.act,id=b.dataset.i,db=S.db;if(!a)return;
+  if(a==="cancel"){S.confirm=null;render();}
+  if(a==="askitem"){S.confirm="i:"+id;render();}
+  if(a==="edit"){S.confirm=null;S.editing=id;document.querySelectorAll(".editf").forEach(f=>f.remove());render();const el=$("#eName");if(el)el.focus();return;}
+  if(a==="canceledit"){S.editing=null;render();return;}
+  if(a==="medit"){S.confirm=null;S.editing=id;S.meType=null;document.querySelectorAll(".editf").forEach(f=>f.remove());render();const el=$("#meTitle");if(el)el.focus();return;}
+  if(a==="gedit"){S.confirm=null;S.editing=id;document.querySelectorAll(".editf").forEach(f=>f.remove());render();const el=$("#egTitle");if(el)el.focus();return;}
+  if(a==="askgroup"){S.confirm="g:"+S.sel;render();}
+  if(a==="editgroup"){const g=S.groups.find(x=>x.id===S.sel);if(!g)return;S.confirm=null;S.gedit=g.id;S.gcolor=g.color||COLORS[0];render();const el=$("#grName");if(el){el.focus();el.select();}return;}
+  if(a==="cancelgedit"){S.gedit=null;render();return;}
+  if(a==="pickphoto"){const f=$("#photoIn");f.value="";f.click();return;}
+  if(a==="rmphoto"){removePhoto(S.sel);return;}
+  if(a==="pickpc"||a==="pcphoto"){S.pcTarget=a==="pcphoto"?id:null;const f=$("#pcFile");f.value="";f.click();return;}
+  if(!db)return;
+  if(a==="gstart"){write(()=>db.doc("games/"+id).update({status:"playing",startedAt:Date.now()}));toast("Movido a En progreso ▶");return;}
+  if(a==="gdone"){write(()=>db.doc("games/"+id).update({status:"done",finishedAt:Date.now()}));toast("¡Enhorabuena! Movido a Terminados 🏆");return;}
+  if(a==="mstart"){const C=curShelf();if(!C)return;write(()=>db.doc(C.col+"/"+id).update({status:"watching",startedAt:Date.now()}));toast(C.toastStart);return;}
+  if(a==="mdone"){const C=curShelf();if(!C)return;write(()=>db.doc(C.col+"/"+id).update({status:"done",finishedAt:Date.now()}));toast(C.toastDone);return;}
+  if(a==="mep"){const C=curShelf();if(!C)return;const m=S[C.col].find(x=>x.id===id);if(!m||epFull(m))return;const ne=(+m.episode||0)+1;const u={episode:ne};if(C.season)u.season=+m.season||1;write(()=>db.doc(C.col+"/"+id).update(u));if(+m.eps&&ne>=+m.eps)toast(`${C.last} ${ne}/${+m.eps} · Pulsa «${C.doneBtn.replace(/^\S+\s/,"")}» para terminarlo`);return;}
+
+  if(a==="mrate"){const C=curShelf();if(!C)return;const m=S[C.col].find(x=>x.id===id);const n=+b.dataset.r;write(()=>db.doc(C.col+"/"+id).update({rating:m&&+m.rating===n?0:n}));return;}
+  if(a==="delmedia"){const C=curShelf();if(!C)return;S.confirm=null;const ph=(S[C.col].find(x=>x.id===id)||{}).photo;write(async()=>{await db.doc(C.col+"/"+id).delete();if(ph&&S.assets)S.assets.delete(ph).catch(()=>{});});return;}
+  if(a==="rate"){const g=S.games.find(x=>x.id===id);const n=+b.dataset.r;write(()=>db.doc("games/"+id).update({rating:g&&+g.rating===n?0:n}));return;}
+  if(a==="delgame"){S.confirm=null;const ph=(S.games.find(x=>x.id===id)||{}).photo;write(async()=>{await db.doc("games/"+id).delete();if(ph&&S.assets)S.assets.delete(ph).catch(()=>{});});return;}
+  if(a==="own"){const it=S.items.find(x=>x.id===id);let price=it&&+it.price||0;write(()=>db.doc("items/"+id).update({status:"own",boughtAt:Date.now(),price}));}
+  if(a==="unown")write(()=>db.doc("items/"+id).update({status:"wish"}));
+  if(a==="delitem"){S.confirm=null;const ph=(S.items.find(x=>x.id===id)||{}).photo;write(async()=>{await db.doc("items/"+id).delete();if(ph&&S.assets)S.assets.delete(ph).catch(()=>{});});}
+  if(a==="delgroup"){const gid=S.sel;S.confirm=null;S.sel=null;const ph=(S.groups.find(x=>x.id===gid)||{}).photo;write(async()=>{for(const it of S.items.filter(x=>x.groupId===gid)){await db.doc("items/"+it.id).delete();if(it.photo&&S.assets)S.assets.delete(it.photo).catch(()=>{});}await db.doc("groups/"+gid).delete();if(ph&&S.assets)S.assets.delete(ph).catch(()=>{});});}
+});
+document.addEventListener("submit",e=>{
+  e.preventDefault();const db=S.db;if(!db)return;
+  if(e.target.id==="fGroup"){
+    const name=$("#gName").value.trim();if(!name)return;
+    const ref=db.collection("groups").doc();S.sel=ref.id;
+    const pf=$("#gPhoto")&&$("#gPhoto").files[0];
+    write(async()=>{await ref.set({name,color:S.color,createdAt:Date.now()});if(pf)await setPhoto(ref.id,pf);});
+  }
+  if(e.target.dataset&&e.target.dataset.edit){
+    const id=e.target.dataset.edit,it=S.items.find(x=>x.id===id);if(!it)return;
+    const v=k=>{const el=document.getElementById(k);return el?el.value.trim():"";};
+    const upd={name:v("eName")||(isPc(it)?"":it.name),version:v("eVer"),price:Math.max(0,parseFloat(v("ePrice"))||0),notes:v("eNotes")};
+    if(isPc(it))upd.member=v("eMember");else upd.kind=v("eKind")||it.kind;
+    S.editing=null;document.querySelectorAll(".editf").forEach(f=>f.remove());render();
+    write(()=>db.doc("items/"+id).update(upd));
+    return;
+  }
+  if(e.target.dataset&&e.target.dataset.grp){
+    const id=e.target.dataset.grp,name=($("#grName").value||"").trim();
+    if(!name){status("Escribe un nombre para el grupo.",true);return;}
+    const color=S.gcolor;S.gedit=null;$("#main").innerHTML="";render();
+    write(()=>db.doc("groups/"+id).update({name,color}));
+    return;
+  }
+  if(e.target.dataset&&e.target.dataset.gedit){
+    const id=e.target.dataset.gedit,g=S.games.find(x=>x.id===id);if(!g)return;
+    const v=k=>{const el=document.getElementById(k);return el?el.value.trim():"";};
+    const upd={title:v("egTitle")||g.title,platform:v("egPlat"),notes:v("egNotes")};
+    const st=v("egStatus");
+    if(st&&st!==g.status){upd.status=st;if(st==="playing")upd.startedAt=Date.now();if(st==="done")upd.finishedAt=Date.now();}
+    S.editing=null;document.querySelectorAll(".editf").forEach(f=>f.remove());render();
+    write(()=>db.doc("games/"+id).update(upd));
+    return;
+  }
+  if(e.target.dataset&&e.target.dataset.medit){
+    const C=curShelf();if(!C)return;
+    const id=e.target.dataset.medit,m=S[C.col].find(x=>x.id===id);if(!m)return;
+    const v=k=>{const el=document.getElementById(k);return el?el.value.trim():"";};
+    const type=v("meType")||m.type||C.defType;
+    const upd={title:v("meTitle")||m.title,type,platform:v("mePlat"),notes:v("meNotes")};
+    if(C.prog(type)){const sn=parseInt(v("meSeason"),10),en=parseInt(v("meEp"),10),tn=parseInt(v("meEps"),10);if(C.season)upd.season=sn>0?sn:null;upd.eps=tn>0?tn:null;upd.episode=en>=0?(upd.eps?Math.min(en,upd.eps):en):null;}
+    const st=v("meStatus");
+    if(st&&st!==m.status){upd.status=st;if(st==="watching")upd.startedAt=Date.now();if(st==="done")upd.finishedAt=Date.now();}
+    S.editing=null;S.meType=null;document.querySelectorAll(".editf").forEach(f=>f.remove());render();
+    write(()=>db.doc(C.col+"/"+id).update(upd));
+    return;
+  }
+  if(e.target.id==="fMedia"){
+    const C=curShelf();if(!C||S.pcBusy)return;
+    const sh=S.shs[S.app],tab=SKEYS.includes(sh.tab)?sh.tab:"watching";
+    const title=$("#mTitle").value.trim();if(!title)return;
+    const now=Date.now(),tv=$("#mType").value,type=C.types.some(x=>x[0]===tv)?tv:C.defType;
+    const data={title,type,platform:$("#mPlat").value.trim(),notes:$("#mNotes").value.trim(),status:tab,rating:0,createdAt:now};
+    if(C.prog(type)){const sn=parseInt(($("#mSeason")||{}).value,10),en=parseInt(($("#mEp")||{}).value,10),tn=parseInt(($("#mEps")||{}).value,10);if(C.season&&sn>0)data.season=sn;if(tn>0)data.eps=tn;if(en>=0)data.episode=tn>0?Math.min(en,tn):en;}
+    if(tab==="watching")data.startedAt=now;if(tab==="done")data.finishedAt=now;
+    const file=S.pcFile;S.pcBusy=true;render();
+    (async()=>{
+      try{
+        if(file&&S.assets){status("Subiendo "+C.poster.toLowerCase()+"…");let b;try{b=await shrink(file)}catch(_){b=file}const r=await S.assets.upload(b,{type:b.type||"image/jpeg"});data.photo=r.id;}
+        await db.collection(C.col).doc().set(data);
+        clearPc();["mTitle","mPlat","mNotes","mSeason","mEp","mEps"].forEach(k=>{const el=document.getElementById(k);if(el)el.value="";});
+        status("");
+      }catch(err){if(data.photo&&S.assets)S.assets.delete(data.photo).catch(()=>{});status(upErr(err),true);}
+      finally{S.pcBusy=false;render();}
+    })();
+    return;
+  }
+  if(e.target.id==="fGame"){
+    if(S.pcBusy)return;
+    const title=$("#nTitle").value.trim();if(!title)return;
+    const now=Date.now();
+    const data={title,platform:$("#nPlat").value.trim(),notes:$("#nNotes").value.trim(),status:S.gtab,rating:0,createdAt:now};
+    if(S.gtab==="playing")data.startedAt=now;if(S.gtab==="done")data.finishedAt=now;
+    const file=S.pcFile;S.pcBusy=true;render();
+    (async()=>{
+      try{
+        if(file&&S.assets){status("Subiendo portada…");let b;try{b=await shrink(file)}catch(_){b=file}const r=await S.assets.upload(b,{type:b.type||"image/jpeg"});data.photo=r.id;}
+        await db.collection("games").doc().set(data);
+        clearPc();["nTitle","nPlat","nNotes"].forEach(k=>{const el=document.getElementById(k);if(el)el.value="";});
+        status("");
+      }catch(err){if(data.photo&&S.assets)S.assets.delete(data.photo).catch(()=>{});status(upErr(err),true);}
+      finally{S.pcBusy=false;render();}
+    })();
+    return;
+  }
+  if(e.target.id==="fPc"){
+    if(S.pcBusy)return;
+    const member=$("#pMember").value.trim(),name=$("#pName").value.trim();
+    if(!member&&!name&&!S.pcFile){status("Añade al menos la foto, el miembro o el álbum.",true);return;}
+    const data={groupId:S.sel,kind:"Photocard",member,name,version:$("#pVer").value.trim(),price:Math.max(0,parseFloat($("#pPrice").value)||0),notes:$("#pNotes").value.trim(),status:S.tab,createdAt:Date.now()};
+    const file=S.pcFile;S.pcBusy=true;render();
+    (async()=>{
+      try{
+        if(file&&S.assets){status("Subiendo photocard…");let b;try{b=await shrink(file)}catch(_){b=file}const r=await S.assets.upload(b,{type:b.type||"image/jpeg"});data.photo=r.id;}
+        await db.collection("items").doc().set(data);
+        clearPc();["pMember","pName","pVer","pPrice","pNotes"].forEach(k=>{const el=document.getElementById(k);if(el)el.value="";});
+        status("");
+      }catch(err){if(data.photo&&S.assets)S.assets.delete(data.photo).catch(()=>{});status(upErr(err),true);}
+      finally{S.pcBusy=false;render();}
+    })();
+  }
+  if(e.target.id==="fItem"){
+    if(S.pcBusy)return;
+    const name=$("#iName").value.trim();if(!name)return;
+    const data={groupId:S.sel,name,kind:$("#iKind").value,version:$("#iVer").value.trim(),price:Math.max(0,parseFloat($("#iPrice").value)||0),notes:$("#iNotes").value.trim(),status:S.tab,createdAt:Date.now()};
+    const file=S.pcFile;
+    if(!file){
+      write(()=>db.collection("items").doc().set(data));
+      ["iName","iVer","iPrice","iNotes"].forEach(k=>{const el=document.getElementById(k);if(el)el.value="";});
+      setTimeout(()=>$("#iName")&&$("#iName").focus(),0);
+    }else{
+      S.pcBusy=true;render();
+      (async()=>{
+        try{
+          if(S.assets){status("Subiendo foto…");let b;try{b=await shrink(file)}catch(_){b=file}const r=await S.assets.upload(b,{type:b.type||"image/jpeg"});data.photo=r.id;}
+          await db.collection("items").doc().set(data);
+          clearPc();["iName","iVer","iPrice","iNotes"].forEach(k=>{const el=document.getElementById(k);if(el)el.value="";});
+          status("");
+        }catch(err){if(data.photo&&S.assets)S.assets.delete(data.photo).catch(()=>{});status(upErr(err),true);}
+        finally{S.pcBusy=false;render();}
+      })();
+    }
+  }
+});
+document.addEventListener("toggle",e=>{if(e.target&&e.target.id==="addWrap")S.addOpen=e.target.open;},true);
+document.addEventListener("change",e=>{
+  if(e.target.id==="photoIn"&&S.sel)setPhoto(S.sel,e.target.files[0]);
+  if(e.target.id==="mType"&&S.shs[S.app]){S.shs[S.app].form=e.target.value;render();return;}
+  if(e.target.id==="meType"){S.meType=e.target.value;render();return;}
+  if(e.target.id==="pcFile"){const f=e.target.files[0];if(!f)return;
+    if(S.pcTarget){const id=S.pcTarget;S.pcTarget=null;replacePcPhoto(id,f);return;}
+    if(!f.type.startsWith("image/")){status("Elige un archivo de imagen (JPG, PNG, WEBP…).",true);return;}
+    clearPc();S.pcFile=f;try{S.pcPrev=URL.createObjectURL(f);}catch(_){}render();}
+});
+document.addEventListener("input",e=>{
+  if(e.target.id==="grColor"){S.gcolor=e.target.value;document.querySelectorAll(".gedit .sw").forEach(x=>x.setAttribute("aria-pressed","false"));const sc=e.target.parentElement;sc.classList.add("on");sc.style.setProperty("--cc",S.gcolor);return;}
+  if(e.target.id==="gColor"){S.color=e.target.value;document.querySelectorAll(".sw").forEach(x=>x.setAttribute("aria-pressed","false"));const sc=e.target.parentElement;sc.classList.add("on");sc.style.setProperty("--cc",S.color);return;}
+  if(e.target.id==="mq"&&S.shs[S.app]){S.shs[S.app].q=e.target.value;const pos=e.target.selectionStart;render();const q=$("#mq");q.focus();q.setSelectionRange(pos,pos);return;}
+  if(e.target.id==="gq"){S.gq=e.target.value;const pos=e.target.selectionStart;render();const q=$("#gq");q.focus();q.setSelectionRange(pos,pos);return;}
+  if(e.target.id==="q"){S.q=e.target.value;const pos=e.target.selectionStart;render();const q=$("#q");q.focus();q.setSelectionRange(pos,pos);}
+});
+
+render();syncThemeBtn();
+(async()=>{
+  const db=await window.claude?.use?.("db");
+  if(!db){status("Abre esta página en claude.ai con tu sesión iniciada para guardar tu colección.",true);S.ready=true;render();return;}
+  S.db=db;
+  const user=await window.claude.use("user");
+  S.canWrite=user?user.isOwner():true;
+  try{S.assets=await window.claude.use("assets");}catch(e){S.assets=null;}
+  let got={g:false,i:false};
+  const timer=setTimeout(()=>status("No se puede conectar con tu colección todavía. Puede que lo que ves no esté al día.",true),10000);
+  const done=()=>{if(got.g&&got.i){clearTimeout(timer);status("");}};
+  const fail=()=>{clearTimeout(timer);status("Se perdió la conexión con la colección. Recarga la página.",true);};
+  db.collection("groups").onSnapshot(s=>{S.groups=s.docs.map(d=>({id:d.id,...d.data()}));if(!s.metadata.fromCache){got.g=true;S.ready=true;done();}render();},fail);
+  ["media","anime","manga"].forEach(k=>db.collection(k).onSnapshot(s=>{S[k]=s.docs.map(d=>({id:d.id,...d.data()}));render();},fail));
+  db.collection("games").onSnapshot(s=>{S.games=s.docs.map(d=>({id:d.id,...d.data()}));render();},fail);
+  db.collection("items").onSnapshot(s=>{S.items=s.docs.map(d=>({id:d.id,...d.data()}));if(!s.metadata.fromCache){got.i=true;done();}render();},fail);
+})();
+</script>
+
+<script type="module" src="app-firebase.js"></script>
+</body>
+</html>

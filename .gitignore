@@ -1,0 +1,4 @@
+# Copias de seguridad con datos personales: nunca al repositorio
+*copia*.json
+*.backup.json
+.DS_Store
