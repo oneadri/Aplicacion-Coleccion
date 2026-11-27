@@ -178,8 +178,58 @@ $("#loginReset").addEventListener("click", async () => {
   catch (er) { msg(authErr(er), true); }
 });
 
+// ---------- compartir (enlace de solo lectura) ----------
+const viewUid = new URLSearchParams(location.search).get("ver");
+const shareRef = (uid) => doc(fs, "users", uid, "settings", "share");
+const shareLink = (uid) => location.origin + location.pathname.replace(/index\.html$/, "") + "?ver=" + encodeURIComponent(uid);
+
+function shareUI(uid) {
+  const area = $("#shareArea"), st = $("#footStatus");
+  const say = (t) => { st.textContent = t; clearTimeout(say.t); say.t = setTimeout(() => { if (st.textContent === t) st.textContent = ""; }, 4000); };
+  onSnapshot(shareRef(uid), (s) => {
+    const on = s.exists() && s.data().public === true;
+    area.innerHTML = on
+      ? `<span class="shareon">🔗 Compartiendo</span><input type="text" id="shareLink" readonly value="${shareLink(uid)}" aria-label="Enlace para compartir"><button class="link" id="shareCopy" type="button">Copiar enlace</button>${navigator.share ? '<button class="link" id="shareSend" type="button">Enviar…</button>' : ""}<button class="link" id="shareOff" type="button">Dejar de compartir</button>`
+      : `<button class="link" id="shareOn" type="button">Compartir mi colección</button>`;
+  }, () => {});
+  area.addEventListener("click", async (e) => {
+    const b = e.target.closest("button"); if (!b) return;
+    try {
+      if (b.id === "shareOn") { await setDoc(shareRef(uid), { public: true, since: Date.now() }); say("Enlace activado: cópialo y mándalo a quien quieras."); }
+      if (b.id === "shareOff") { await setDoc(shareRef(uid), { public: false, since: Date.now() }); say("Has dejado de compartir. El enlace ya no funciona."); }
+      if (b.id === "shareCopy") {
+        const link = shareLink(uid);
+        try { await navigator.clipboard.writeText(link); say("Enlace copiado."); }
+        catch (_) { const i = $("#shareLink"); i.focus(); i.select(); say("Mantén pulsado el enlace para copiarlo."); }
+      }
+      if (b.id === "shareSend") { await navigator.share({ title: "Mi Colección", text: "Mira mi colección", url: shareLink(uid) }).catch(() => {}); }
+    } catch (er) { say("No se pudo cambiar. Revisa las reglas de Firebase."); }
+  });
+}
+
+async function startViewer(uid) {
+  window.__booted = true;
+  document.body.classList.add("viewer");
+  currentUid = uid;
+  let ok = false;
+  try { const s = await getDoc(shareRef(uid)); ok = s.exists() && s.data().public === true; } catch (_) { ok = false; }
+  if (!ok) {
+    login.hidden = false; $("#loginForm").hidden = true;
+    msg("Esta colección no está compartida ahora mismo. Pide un enlace nuevo a quien te lo pasó.", true);
+    return;
+  }
+  const api = makeApi(uid);
+  api.assets = null;
+  api.user = { isOwner: () => false, canEdit: () => false, can: () => false, id: async () => null, me: async () => ({}) };
+  const foot = $("#appfoot");
+  foot.hidden = false;
+  foot.innerHTML = '<span class="viewnote">👀 Estás viendo una colección compartida, en modo solo lectura.</span>';
+  window.__fbResolve(api);
+}
+
 let resolved = false;
-onAuthStateChanged(auth, (u) => {
+if (viewUid) startViewer(viewUid);
+else onAuthStateChanged(auth, (u) => {
   window.__booted = true;
   const foot = $("#appfoot");
   if (!u) {
@@ -191,7 +241,7 @@ onAuthStateChanged(auth, (u) => {
   login.hidden = true;
   foot.hidden = false;
   $("#footUser").textContent = u.email || "";
-  if (!resolved) { resolved = true; window.__fbResolve(makeApi(u.uid)); }
+  if (!resolved) { resolved = true; shareUI(u.uid); window.__fbResolve(makeApi(u.uid)); }
 });
 
 $("#footLogout").addEventListener("click", () => signOut(auth));

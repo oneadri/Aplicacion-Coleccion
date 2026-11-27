@@ -1,9 +1,12 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Cada persona solo puede leer y escribir sus propios datos.
     match /users/{uid}/{document=**} {
-      allow read, write: if request.auth != null && request.auth.uid == uid;
+      // Solo la persona titular de la cuenta puede cambiar sus datos.
+      allow write: if request.auth != null && request.auth.uid == uid;
+      // Puede leerlos la persona titular, o cualquiera si ha activado «Compartir mi colección».
+      allow read: if (request.auth != null && request.auth.uid == uid)
+                  || get(/databases/$(database)/documents/users/$(uid)/settings/share).data.public == true;
     }
   }
 }
