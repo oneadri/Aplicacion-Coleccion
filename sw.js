@@ -1,7 +1,7 @@
 // Permite instalar la app y abrirla sin conexión.
 // Siempre intenta la versión más nueva y, si no hay internet, usa la guardada.
-const CACHE = "mi-coleccion-v2";
-const SHELL = ["./", "./index.html", "./app-firebase.js", "./firebase-config.js", "./manifest.webmanifest", "./icons/icon-192.png", "./icons/icon-512.png"];
+const CACHE = "mi-coleccion-v3";
+const SHELL = ["./", "./index.html", "./app-firebase.js", "./firebase-config.js", "./manifest.webmanifest", "./icons/icon-192.png", "./icons/icon-512.png", "./lib/firebase-app.js", "./lib/firebase-auth.js", "./lib/firebase-firestore.js"];
 
 self.addEventListener("install", (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting()));

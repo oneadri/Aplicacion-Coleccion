@@ -1,17 +1,18 @@
 // Conecta la app con Firebase (cuenta, base de datos y fotos) y ofrece
 // a la página la misma interfaz que usaba dentro de Claude (claude.use).
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { initializeApp } from "./lib/firebase-app.js";
 import {
   initializeFirestore, persistentLocalCache, persistentMultipleTabManager,
   collection, doc, onSnapshot, setDoc, updateDoc, deleteDoc, getDoc, getDocs, writeBatch
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+} from "./lib/firebase-firestore.js";
 import {
   getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword,
   sendPasswordResetEmail, signOut, setPersistence, browserLocalPersistence
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+} from "./lib/firebase-auth.js";
 import { firebaseConfig } from "./firebase-config.js";
 
 const $ = (s) => document.querySelector(s);
+
 const COLS = ["groups", "items", "games", "media", "anime", "manga"];
 const GIF = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
 
@@ -179,6 +180,7 @@ $("#loginReset").addEventListener("click", async () => {
 
 let resolved = false;
 onAuthStateChanged(auth, (u) => {
+  window.__booted = true;
   const foot = $("#appfoot");
   if (!u) {
     if (resolved) { location.reload(); return; }

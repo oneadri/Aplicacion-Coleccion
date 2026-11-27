@@ -1184,6 +1184,10 @@ render();syncThemeBtn();
 })();
 </script>
 
-<script type="module" src="app-firebase.js"></script>
+<script type="module" src="app-firebase.js" onerror="window.__bootFail&&window.__bootFail('no se pudo cargar')"></script>
+<script>
+window.__bootFail=function(why){var l=document.getElementById('login');if(!l||window.__booted)return;l.hidden=false;var f=document.getElementById('loginForm');if(f)f.hidden=true;var m=document.getElementById('loginMsg');m.classList.add('bad');m.textContent='No se pudo conectar con tu cuenta ('+why+'). Comprueba tu conexión, desactiva el bloqueador de anuncios para esta página o prueba en otro navegador, y vuelve a cargar.';};
+setTimeout(function(){window.__bootFail('tiempo agotado');},15000);
+</script>
 </body>
 </html>
