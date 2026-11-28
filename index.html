@@ -133,6 +133,8 @@ body[data-app="books"]{--sec:var(--books)}
 .badge.watching{background:var(--sec);color:var(--on-color)}
 .acts .watch{background:var(--sec);color:var(--on-color);border-color:transparent}
 .chiprow{display:flex;gap:5px;flex-wrap:wrap}
+.plat.ownchip{background:var(--own-soft);color:var(--own);border-color:transparent}
+.plat.wishchip{background:var(--accent-soft);color:var(--accent);border-color:transparent}
 .eprow{display:flex;align-items:center;gap:8px;margin-top:4px;font-weight:700;font-size:.85rem;color:var(--sec)}
 .epbtn{border:1px solid var(--sec);background:transparent;color:var(--sec);border-radius:6px;padding:2px 8px;font-size:.75rem;font-weight:800}
 .epbtn:hover{background:var(--sec);color:var(--on-color)}
@@ -474,7 +476,7 @@ window.claude={use:async n=>{const api=await window.__fbReady;return api?api[n]|
 <script>
 const COLORS=["#e2307a","#ff6fa8","#f7a8c8","#e53935","#b71c3c","#f08a24","#ffb38a","#e2b714","#ffe066","#8bc34a","#22b893","#00897b","#9be7d8","#26c6da","#2d8fd9","#1a3e8c","#9cc9ff","#7b5cd6","#b39ddb","#c04fc0","#8d5a3b","#c8a27a","#5b5b6e","#bdbdc7","#ffffff","#111111"];
 const KINDS=["Álbum","Lightstick","Merch","Póster","Season's greetings","Otro"];
-const S={groups:[],items:[],sel:null,tab:"wish",color:COLORS[0],q:"",confirm:null,canWrite:false,ready:false,db:null,assets:null,uploading:null,sec:"merch",member:"",pcFile:null,pcPrev:null,pcBusy:false,pcTarget:null,editing:null,gedit:null,gcolor:null,media:[],anime:[],manga:[],books:[],shs:{media:{tab:"watching",type:"",plat:"",q:"",form:"movie"},anime:{tab:"watching",type:"",plat:"",q:"",form:"series"},manga:{tab:"watching",type:"",plat:"",q:"",form:"manga"},books:{tab:"watching",type:"",plat:"",q:"",form:"novel"}},meType:null,app:"home",games:[],gtab:"playing",plat:"",gq:""};
+const S={groups:[],items:[],sel:null,tab:"wish",color:COLORS[0],q:"",confirm:null,canWrite:false,ready:false,db:null,assets:null,uploading:null,sec:"merch",member:"",pcFile:null,pcPrev:null,pcBusy:false,pcTarget:null,editing:null,gedit:null,gcolor:null,media:[],anime:[],manga:[],books:[],shs:{media:{tab:"watching",type:"",plat:"",q:"",form:"movie"},anime:{tab:"watching",type:"",plat:"",q:"",form:"series"},manga:{tab:"watching",type:"",plat:"",q:"",form:"manga"},books:{tab:"watching",type:"",plat:"",q:"",form:"novel",own:""}},meType:null,app:"home",games:[],gtab:"playing",plat:"",gq:""};
 try{const gt=localStorage.getItem("kp-gtab");if(gt==="pending"||gt==="playing"||gt==="done")S.gtab=gt;}catch(e){}
 const HASH={home:"#inicio",kpop:"#kpop",games:"#juegos",media:"#pelis",anime:"#anime",manga:"#manga",books:"#libros"};
 const fromHash=h=>h==="#juegos"?"games":h==="#kpop"?"kpop":h==="#inicio"?"home":h==="#pelis"?"media":h==="#anime"?"anime":h==="#manga"?"manga":h==="#libros"?"books":null;
@@ -717,7 +719,7 @@ const SHELF={
     toastStart:"Movido a Leyendo 📖",toastDone:"¡Leído! Movido a Leídos ✅",last:"¡Último tomo!"},
   books:{col:"books",icon:"📕",h2:"Libros",brand:"Mis Libros",sticker:"Libros",color:"var(--books)",
     st:{watching:{l:"Leyendo",one:"Leyendo",ic:"📖"},pending:{l:"Pendientes",one:"Pendiente",ic:"⏳"},done:{l:"Leídos",one:"Leído",ic:"✅"}},
-    types:[["novel","Novela","Novelas","novelas"],["nonfic","No ficción","No ficción","no ficción"],["comic","Cómic","Cómics","cómics"],["other","Otro","Otros","otros"]],defType:"novel",prog:()=>true,season:false,
+    types:[["novel","Novela","Novelas","novelas"],["nonfic","No ficción","No ficción","no ficción"],["art","Libro de arte","Libros de arte","libros de arte"],["comic","Cómic","Cómics","cómics"],["other","Otro","Otros","otros"]],defType:"novel",prog:t=>t!=="art",season:false,own:true,
     plat:"Autor/a",platPh:"p. ej. Carlos Ruiz Zafón",list:"bookList",cur:"Página actual",tot:"Páginas totales",pre:"Pág. ",preTot:"Pág. ",plus:"+10 pág.",plusAria:"Sumar diez páginas",step:10,totPh:"p. ej. 350",
     start:"📖 Empezar",doneBtn:"✅ ¡Leído!",again:"Volver a leer",poster:"Portada",
     ph:()=>"p. ej. La sombra del viento",notesPh:"Editorial, saga, quién me lo recomendó…",
@@ -743,6 +745,7 @@ function shelfEdit(m,C){
     <label><span class="label">${C.plat}</span><input type="text" id="mePlat" list="${C.list}" value="${esc(m.platform)}" maxlength="40"></label>
     <label><span class="label">Estado</span><select id="meStatus">${SKEYS.map(k=>`<option value="${k}"${k===m.status?" selected":""}>${C.st[k].one}</option>`).join("")}</select></label>
     ${pr?`${C.season?`<label><span class="label">Temporada</span><input type="number" id="meSeason" min="1" value="${+m.season||""}" placeholder="1"></label>`:""}<label><span class="label">${C.cur}</span><input type="number" id="meEp" min="0" value="${m.episode!=null&&m.episode!==""?+m.episode:""}" placeholder="0"></label><label><span class="label">${C.tot}</span><input type="number" id="meEps" min="1" value="${+m.eps||""}" placeholder="${C.totPh||"p. ej. 11"}"></label>`:""}
+    ${C.own?`<label><span class="label">¿Lo tienes?</span><select id="meOwn">${[["","Sin indicar"],["own","✓ Lo tengo"],["wish","♡ Lo quiero"]].map(([k,l])=>`<option value="${k}"${(m.own||"")===k?" selected":""}>${l}</option>`).join("")}</select></label>`:""}
     <label><span class="label">Notas</span><input type="text" id="meNotes" value="${esc(m.notes)}" maxlength="200"></label>
     <div class="editacts"><button class="btn sm" type="submit">Guardar</button><button class="btn sm ghost" type="button" data-act="canceledit">Cancelar</button></div>
   </form>`;
@@ -758,11 +761,11 @@ function shelfCard(m,C){
   const eprow=pr&&(ep||m.status==="watching")?`<span class="eprow${full?" full":""}"><span class="epl">${full?"✓ ":""}${ep||"Sin empezar"}</span>${epBtn}</span>${+m.eps?`<span class="epbar" role="progressbar" aria-valuenow="${Math.min(+m.episode||0,+m.eps)}" aria-valuemin="0" aria-valuemax="${+m.eps}"><span style="width:${Math.min(100,Math.round((+m.episode||0)/(+m.eps)*100))}%"></span></span>`:""}`:"";
   const c=S.confirm==="i:"+m.id;
   const main=m.status==="pending"?`<button class="watch" data-act="mstart" data-i="${m.id}">${C.start}</button>`:m.status==="watching"?`<button class="got" data-act="mdone" data-i="${m.id}">${C.doneBtn}</button>`:`<button data-act="mstart" data-i="${m.id}">${C.again}</button>`;
-  const actions=c?`<div class="acts"><span class="confirm full">¿Borrar? <button class="del" data-act="delmedia" data-i="${m.id}">Sí, borrar</button><button data-act="cancel">No</button></span></div>`:`<div class="acts">${main}<span class="icons">${ed&&!m.photo?`<button class="ib" data-act="pcphoto" data-i="${m.id}" aria-label="Añadir ${C.poster.toLowerCase()}" title="Añadir ${C.poster.toLowerCase()}">${ICON.cam}</button>`:""}<button class="ib" data-act="medit" data-i="${m.id}" aria-label="Editar" title="Editar">${ICON.edit}</button><button class="ib del" data-act="askitem" data-i="${m.id}" aria-label="Borrar" title="Borrar">${ICON.trash}</button></span></div>`;
+  const actions=c?`<div class="acts"><span class="confirm full">¿Borrar? <button class="del" data-act="delmedia" data-i="${m.id}">Sí, borrar</button><button data-act="cancel">No</button></span></div>`:`<div class="acts">${C.own&&m.own==="wish"?`<button class="got" data-act="mown" data-i="${m.id}">✓ ¡Conseguido!</button>`:""}${main}<span class="icons">${ed&&!m.photo?`<button class="ib" data-act="pcphoto" data-i="${m.id}" aria-label="Añadir ${C.poster.toLowerCase()}" title="Añadir ${C.poster.toLowerCase()}">${ICON.cam}</button>`:""}<button class="ib" data-act="medit" data-i="${m.id}" aria-label="Editar" title="Editar">${ICON.edit}</button><button class="ib del" data-act="askitem" data-i="${m.id}" aria-label="Borrar" title="Borrar">${ICON.trash}</button></span></div>`;
   return `<article class="pcard gcard mcard st-${esc(m.status)}">
     ${ed?`<button class="pcimg" data-act="pcphoto" data-i="${m.id}" aria-label="${m.photo?"Cambiar":"Añadir"} ${C.poster.toLowerCase()}">${img}</button>`:`<div class="pcimg">${img}</div>`}
     <span class="badge ${esc(m.status)}">${st.ic}</span>
-    <div class="pcinfo">${S.canWrite&&S.editing===m.id?shelfEdit(m,C):`<span class="pcmem">${esc(m.title)}</span><span class="chiprow"><span class="plat">${typeL(C,t)}</span>${m.platform?`<span class="plat">${esc(m.platform)}</span>`:""}</span>${eprow}${stars}${m.notes?`<span class="meta">${esc(m.notes)}</span>`:""}${when?`<span class="meta">${when}</span>`:""}${S.canWrite?actions:""}`}</div>
+    <div class="pcinfo">${S.canWrite&&S.editing===m.id?shelfEdit(m,C):`<span class="pcmem">${esc(m.title)}</span><span class="chiprow">${C.own&&m.own==="own"?`<span class="plat ownchip">✓ Lo tengo</span>`:C.own&&m.own==="wish"?`<span class="plat wishchip">♡ Lo quiero</span>`:""}<span class="plat">${typeL(C,t)}</span>${m.platform?`<span class="plat">${esc(m.platform)}</span>`:""}</span>${eprow}${stars}${m.notes?`<span class="meta">${esc(m.notes)}</span>`:""}${when?`<span class="meta">${when}</span>`:""}${S.canWrite?actions:""}`}</div>
   </article>`;
 }
 function renderShelf(key){
@@ -772,23 +775,24 @@ function renderShelf(key){
   $("#totals").innerHTML=`<div class="chip done"><span class="label">${C.st.done.l}</span><b class="num">${c.done}</b></div><div class="chip cine"><span class="label">${C.st.watching.l}</span><b class="num">${c.watching}</b></div><div class="chip pend"><span class="label">${C.st.pending.l}</span><b class="num">${c.pending}</b></div>`;
   const plats=[...new Set(all.map(m=>(m.platform||"").trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"es"));
   if(sh.plat&&!plats.includes(sh.plat))sh.plat="";
-  const q=sh.q.trim().toLowerCase(),cur=SKEYS.includes(sh.tab)?sh.tab:"watching",CS=C.st[cur];
+  const TABS=C.own?[...SKEYS,"all"]:SKEYS;const q=sh.q.trim().toLowerCase(),cur=TABS.includes(sh.tab)?sh.tab:"watching",CS=cur==="all"?{l:"Todos",ic:"📚"}:C.st[cur];c.all=all.length;
+  const nOwn=all.filter(m=>m.own==="own").length,nWish=all.filter(m=>m.own==="wish").length;
   const key2=m=>cur==="done"?(m.finishedAt||m.createdAt||0):cur==="watching"?(m.startedAt||m.createdAt||0):(m.createdAt||0);
   const typeOk=m=>!sh.type||(m.type||C.defType)===sh.type;
-  const list=all.filter(m=>m.status===cur&&typeOk(m)&&(!sh.plat||(m.platform||"").trim()===sh.plat)&&(!q||[m.title,m.platform,m.notes].join(" ").toLowerCase().includes(q))).sort((a,b)=>key2(b)-key2(a));
+  const list=all.filter(m=>(cur==="all"||m.status===cur)&&typeOk(m)&&(!sh.own||m.own===sh.own)&&(!sh.plat||(m.platform||"").trim()===sh.plat)&&(!q||[m.title,m.platform,m.notes].join(" ").toLowerCase().includes(q))).sort((a,b)=>key2(b)-key2(a));
   const ft=sh.form||C.defType,pr=C.prog(ft);
   const total=all.length,pct=total?Math.round(c.done/total*100):0;
   const byType=C.types.map(([k,sg,,pl])=>{const n=all.filter(m=>(m.type||C.defType)===k).length;return n?`${n} ${n===1?sg.toLowerCase():pl}`:"";}).filter(Boolean).join(" · ");
   const typeChips=[["","Todo"],...C.types.map(([k,,pl])=>[k,pl])];
-  const filtered=q||sh.plat||sh.type;
+  const filtered=q||sh.plat||sh.type||sh.own;
   setMain(`<section class="page" style="--c:${C.color}">
     <div class="banner">
       <h2>${C.h2}</h2>
-      <p class="gsub">${total?`${byType} · ${C.seen} ${c.done} de ${total}`:C.intro}</p>
+      <p class="gsub">${total?`${byType} · ${C.seen} ${c.done} de ${total}${C.own&&(nOwn||nWish)?` · tienes ${nOwn} · quieres ${nWish}`:""}`:C.intro}</p>
       ${total?`<div class="gprog" role="progressbar" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100"><span style="width:${pct}%"></span></div>`:""}
     </div>
     <div class="tabsbar">
-      <div class="tabs" role="tablist">${SKEYS.map(k=>`<button class="tab" role="tab" data-mtab="${k}" aria-selected="${k===cur}">${C.st[k].ic} ${C.st[k].l}<span class="pill num">${c[k]}</span></button>`).join("")}</div>
+      <div class="tabs" role="tablist">${TABS.map(k=>{const s=k==="all"?{l:"Todos",ic:"📚"}:C.st[k];return `<button class="tab" role="tab" data-mtab="${k}" aria-selected="${k===cur}">${s.ic} ${s.l}<span class="pill num">${c[k]}</span></button>`;}).join("")}</div>
       <input type="text" class="search" id="mq" placeholder="${C.search}" value="${esc(sh.q)}" aria-label="${C.search}">
     </div>
     <div class="body">
@@ -799,13 +803,15 @@ function renderShelf(key){
           <label><span class="label">Tipo</span><select id="mType">${C.types.map(([k,l])=>`<option value="${k}"${k===ft?" selected":""}>${l}</option>`).join("")}</select></label>
           <label><span class="label">${C.plat}</span><input type="text" id="mPlat" list="${C.list}" placeholder="${C.platPh}" maxlength="40"></label>
           ${pr?`${C.season?`<label><span class="label">Temporada</span><input type="number" id="mSeason" min="1" placeholder="1" inputmode="numeric"></label>`:""}<label><span class="label">${C.cur}</span><input type="number" id="mEp" min="0" placeholder="0" inputmode="numeric"></label><label class="${C.season?"full":""}"><span class="label">${C.tot}</span><input type="number" id="mEps" min="1" placeholder="${C.totPh||"p. ej. 11"}" inputmode="numeric"></label>`:""}
+          ${C.own?`<label class="full"><span class="label">¿Lo tienes?</span><select id="mOwn"><option value="">Sin indicar</option><option value="own">✓ Lo tengo</option><option value="wish">♡ Lo quiero</option></select></label>`:""}
           <label class="full"><span class="label">Notas</span><input type="text" id="mNotes" maxlength="200" placeholder="${C.notesPh}"></label>
-          <button class="btn full" type="submit" ${S.pcBusy?"disabled":""}>${S.pcBusy?"Subiendo…":"Añadir a "+CS.l}</button>
+          <button class="btn full" type="submit" ${S.pcBusy?"disabled":""}>${S.pcBusy?"Subiendo…":cur==="all"?"Añadir a Pendientes":"Añadir a "+CS.l}</button>
         </div>
       </form>`:`<p class="ro">Estás viendo la lista en modo lectura.</p>`}
+      ${C.own?`<div class="mchips" aria-label="Filtrar por si lo tienes">${[["","Todos"],["own","✓ Lo tengo"],["wish","♡ Lo quiero"]].map(([k,l])=>`<button class="mchip" data-mo="${k}" aria-pressed="${(sh.own||"")===k}">${l}</button>`).join("")}</div>`:""}
       <div class="mchips" aria-label="Filtrar por tipo">${typeChips.map(([k,l])=>`<button class="mchip" data-mt="${k}" aria-pressed="${sh.type===k}">${l}</button>`).join("")}</div>
       ${plats.length>1?`<div class="mchips" aria-label="Filtrar por ${C.plat.toLowerCase()}"><button class="mchip" data-mpf="" aria-pressed="${!sh.plat}">Todas</button>${plats.map(p=>`<button class="mchip" data-mpf="${esc(p)}" aria-pressed="${sh.plat===p}">${esc(p)}</button>`).join("")}</div>`:""}
-      ${list.length?`<div class="pcgrid">${list.map(m=>shelfCard(m,C)).join("")}</div>`:`<div class="empty"><span class="sleeve"></span><h3>${filtered?"Nada coincide con el filtro":C.empty[cur]}</h3><p>${filtered?"Prueba con otra palabra o elige «Todo».":cur==="done"?C.hintDone:C.hintAdd}</p></div>`}
+      ${list.length?`<div class="pcgrid">${list.map(m=>shelfCard(m,C)).join("")}</div>`:`<div class="empty"><span class="sleeve"></span><h3>${filtered?"Nada coincide con el filtro":cur==="all"?"Aún no has apuntado ningún libro":C.empty[cur]}</h3><p>${filtered?"Prueba con otra palabra o elige «Todo».":cur==="done"?C.hintDone:C.hintAdd}</p></div>`}
     </div>
   </section>`);
 }
@@ -1004,6 +1010,7 @@ document.addEventListener("click",e=>{
   if(b.dataset.hsh){const k=b.dataset.hsh,sh=S.shs[k];if(sh){if(b.dataset.hst)sh.tab=b.dataset.hst;sh.plat="";sh.type="";}goApp(k);return;}
   if(b.dataset.mtab&&S.shs[S.app]){S.shs[S.app].tab=b.dataset.mtab;S.confirm=null;S.editing=null;render();return;}
   if(b.dataset.mt!==undefined&&S.shs[S.app]){S.shs[S.app].type=b.dataset.mt;render();return;}
+  if(b.dataset.mo!==undefined&&S.shs[S.app]){S.shs[S.app].own=b.dataset.mo;render();return;}
   if(b.dataset.mpf!==undefined&&S.shs[S.app]){S.shs[S.app].plat=b.dataset.mpf;render();return;}
   if(b.dataset.hgt){S.gtab=b.dataset.hgt;S.plat="";goApp("games");return;}
   if(b.dataset.app){goApp(b.dataset.app);return;}
@@ -1034,6 +1041,7 @@ document.addEventListener("click",e=>{
   if(a==="mdone"){const C=curShelf();if(!C)return;write(()=>db.doc(C.col+"/"+id).update({status:"done",finishedAt:Date.now()}));toast(C.toastDone);return;}
   if(a==="mep"){const C=curShelf();if(!C)return;const m=S[C.col].find(x=>x.id===id);if(!m||epFull(m))return;const ne=Math.min(+m.eps||Infinity,(+m.episode||0)+(C.step||1));const u={episode:ne};if(C.season)u.season=+m.season||1;write(()=>db.doc(C.col+"/"+id).update(u));if(+m.eps&&ne>=+m.eps)toast(`${C.last} ${ne}/${+m.eps} · Pulsa «${C.doneBtn.replace(/^\S+\s/,"")}» para terminarlo`);return;}
 
+  if(a==="mown"){const C=curShelf();if(!C)return;write(()=>db.doc(C.col+"/"+id).update({own:"own",boughtAt:Date.now()}));toast("¡Conseguido! Ahora lo tienes ✓");return;}
   if(a==="mrate"){const C=curShelf();if(!C)return;const m=S[C.col].find(x=>x.id===id);const n=+b.dataset.r;write(()=>db.doc(C.col+"/"+id).update({rating:m&&+m.rating===n?0:n}));return;}
   if(a==="delmedia"){const C=curShelf();if(!C)return;S.confirm=null;const ph=(S[C.col].find(x=>x.id===id)||{}).photo;write(async()=>{await db.doc(C.col+"/"+id).delete();if(ph&&S.assets)S.assets.delete(ph).catch(()=>{});});return;}
   if(a==="rate"){const g=S.games.find(x=>x.id===id);const n=+b.dataset.r;write(()=>db.doc("games/"+id).update({rating:g&&+g.rating===n?0:n}));return;}
@@ -1083,6 +1091,7 @@ document.addEventListener("submit",e=>{
     const v=k=>{const el=document.getElementById(k);return el?el.value.trim():"";};
     const type=v("meType")||m.type||C.defType;
     const upd={title:v("meTitle")||m.title,type,platform:v("mePlat"),notes:v("meNotes")};
+    if(C.own)upd.own=v("meOwn");
     if(C.prog(type)){const sn=parseInt(v("meSeason"),10),en=parseInt(v("meEp"),10),tn=parseInt(v("meEps"),10);if(C.season)upd.season=sn>0?sn:null;upd.eps=tn>0?tn:null;upd.episode=en>=0?(upd.eps?Math.min(en,upd.eps):en):null;}
     const st=v("meStatus");
     if(st&&st!==m.status){upd.status=st;if(st==="watching")upd.startedAt=Date.now();if(st==="done")upd.finishedAt=Date.now();}
@@ -1092,10 +1101,11 @@ document.addEventListener("submit",e=>{
   }
   if(e.target.id==="fMedia"){
     const C=curShelf();if(!C||S.pcBusy)return;
-    const sh=S.shs[S.app],tab=SKEYS.includes(sh.tab)?sh.tab:"watching";
+    const sh=S.shs[S.app],tab=SKEYS.includes(sh.tab)?sh.tab:sh.tab==="all"?"pending":"watching";
     const title=$("#mTitle").value.trim();if(!title)return;
     const now=Date.now(),tv=$("#mType").value,type=C.types.some(x=>x[0]===tv)?tv:C.defType;
     const data={title,type,platform:$("#mPlat").value.trim(),notes:$("#mNotes").value.trim(),status:tab,rating:0,createdAt:now};
+    if(C.own&&$("#mOwn"))data.own=$("#mOwn").value;
     if(C.prog(type)){const sn=parseInt(($("#mSeason")||{}).value,10),en=parseInt(($("#mEp")||{}).value,10),tn=parseInt(($("#mEps")||{}).value,10);if(C.season&&sn>0)data.season=sn;if(tn>0)data.eps=tn;if(en>=0)data.episode=tn>0?Math.min(en,tn):en;}
     if(tab==="watching")data.startedAt=now;if(tab==="done")data.finishedAt=now;
     const file=S.pcFile;S.pcBusy=true;render();
@@ -1103,7 +1113,7 @@ document.addEventListener("submit",e=>{
       try{
         if(file&&S.assets){status("Subiendo "+C.poster.toLowerCase()+"…");let b;try{b=await shrink(file)}catch(_){b=file}const r=await S.assets.upload(b,{type:b.type||"image/jpeg"});data.photo=r.id;}
         await db.collection(C.col).doc().set(data);
-        clearPc();["mTitle","mPlat","mNotes","mSeason","mEp","mEps"].forEach(k=>{const el=document.getElementById(k);if(el)el.value="";});
+        clearPc();["mTitle","mPlat","mNotes","mSeason","mEp","mEps","mOwn"].forEach(k=>{const el=document.getElementById(k);if(el)el.value="";});
         status("");
       }catch(err){if(data.photo&&S.assets)S.assets.delete(data.photo).catch(()=>{});status(upErr(err),true);}
       finally{S.pcBusy=false;render();}
