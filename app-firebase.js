@@ -13,7 +13,7 @@ import { firebaseConfig } from "./firebase-config.js";
 
 const $ = (s) => document.querySelector(s);
 
-const COLS = ["groups", "items", "games", "media", "anime", "manga"];
+const COLS = ["groups", "items", "games", "media", "anime", "manga", "books"];
 const GIF = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
 
 const login = $("#login");

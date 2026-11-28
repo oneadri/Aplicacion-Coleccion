@@ -118,12 +118,13 @@ header.top{display:flex;flex-wrap:wrap;gap:16px 24px;align-items:flex-end;justif
 @media (max-width:780px){.layout{grid-template-columns:minmax(0,1fr);gap:16px}}
 
 /* home */
-:root{--cine:#ff6b3d;--anime:#b57bff;--manga:#22d3ee}
-@media (prefers-color-scheme: light){:root:not([data-theme="dark"]){--cine:#d4470f;--anime:#7e3fdb;--manga:#0a87a3}}
-:root[data-theme="light"]{--cine:#d4470f;--anime:#7e3fdb;--manga:#0a87a3}
+:root{--cine:#ff6b3d;--anime:#b57bff;--manga:#22d3ee;--books:#d9a066}
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]){--cine:#d4470f;--anime:#7e3fdb;--manga:#0a87a3;--books:#8a5527}}
+:root[data-theme="light"]{--cine:#d4470f;--anime:#7e3fdb;--manga:#0a87a3;--books:#8a5527}
 body[data-app="media"]{--sec:var(--cine)}
 body[data-app="anime"]{--sec:var(--anime)}
 body[data-app="manga"]{--sec:var(--manga)}
+body[data-app="books"]{--sec:var(--books)}
 @media (max-width:620px){.apps{flex-wrap:wrap;overflow:visible}}
 .chip.cine b{color:var(--c,var(--sec))}
 .tab[data-mtab="watching"]{--tc:var(--sec)}.tab[data-mtab="pending"]{--tc:var(--pend)}.tab[data-mtab="done"]{--tc:var(--own)}
@@ -431,11 +432,12 @@ input:focus,select:focus,textarea:focus{border-color:var(--sec);box-shadow:0 0 0
       <button class="themebtn" id="themeBtn" type="button" aria-label="Cambiar a modo oscuro" title="Cambiar a modo oscuro">🌙</button>
     </div>
   </header>
-  <nav class="apps" aria-label="Apartados"><button class="appbtn" data-app="home" aria-pressed="true">🏠 Inicio</button><button class="appbtn" data-app="kpop" aria-pressed="false">💿 K-pop</button><button class="appbtn" data-app="games" aria-pressed="false">🎮 Juegos</button><button class="appbtn" data-app="media" aria-pressed="false">🎬 Pelis<span class="lg"> y series</span></button><button class="appbtn" data-app="anime" aria-pressed="false">🍥 Anime</button><button class="appbtn" data-app="manga" aria-pressed="false">📚 Manga</button></nav>
+  <nav class="apps" aria-label="Apartados"><button class="appbtn" data-app="home" aria-pressed="true">🏠 Inicio</button><button class="appbtn" data-app="kpop" aria-pressed="false">💿 K-pop</button><button class="appbtn" data-app="games" aria-pressed="false">🎮 Juegos</button><button class="appbtn" data-app="media" aria-pressed="false">🎬 Pelis<span class="lg"> y series</span></button><button class="appbtn" data-app="anime" aria-pressed="false">🍥 Anime</button><button class="appbtn" data-app="manga" aria-pressed="false">📚 Manga</button><button class="appbtn" data-app="books" aria-pressed="false">📕 Libros</button></nav>
   <p class="status" id="status">Cargando tu colección…</p>
   <datalist id="platList"><option>PC</option><option>PS5</option><option>PS4</option><option>Switch</option><option>Switch 2</option><option>Xbox Series</option><option>Steam Deck</option><option>Móvil</option><option>Retro</option></datalist>
   <datalist id="streamList"><option>Netflix</option><option>Disney+</option><option>Max</option><option>Prime Video</option><option>Apple TV+</option><option>Movistar Plus+</option><option>Filmin</option><option>SkyShowtime</option><option>Crunchyroll</option><option>Cine</option><option>Blu-ray / DVD</option></datalist>
   <datalist id="animeList"><option>Crunchyroll</option><option>Netflix</option><option>Prime Video</option><option>Disney+</option><option>Max</option><option>ADN</option><option>Cine</option></datalist>
+  <datalist id="bookList"></datalist>
   <datalist id="mangaList"><option>Norma Editorial</option><option>Planeta Cómic</option><option>Ivrea</option><option>Panini</option><option>Milky Way</option><option>Kodai</option><option>ECC</option><option>Arechi</option><option>Distrito Manga</option><option>Online</option></datalist>
   <div class="layout" id="layout">
     <nav class="rail" id="rail" aria-label="Grupos"></nav>
@@ -445,7 +447,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--sec);box-shadow:0 0 0
 
 <div class="login" id="login" hidden>
   <form class="loginbox" id="loginForm" autocomplete="on">
-    <span class="label">K-pop · Juegos · Pelis · Anime · Manga</span>
+    <span class="label">K-pop · Juegos · Pelis · Anime · Manga · Libros</span>
     <h1>Mi Colección</h1>
     <p class="loginsub">Entra con tu cuenta para ver tu colección en cualquier dispositivo.</p>
     <label><span class="label">Correo</span><input type="email" id="loginEmail" autocomplete="username" required></label>
@@ -472,10 +474,10 @@ window.claude={use:async n=>{const api=await window.__fbReady;return api?api[n]|
 <script>
 const COLORS=["#e2307a","#ff6fa8","#f7a8c8","#e53935","#b71c3c","#f08a24","#ffb38a","#e2b714","#ffe066","#8bc34a","#22b893","#00897b","#9be7d8","#26c6da","#2d8fd9","#1a3e8c","#9cc9ff","#7b5cd6","#b39ddb","#c04fc0","#8d5a3b","#c8a27a","#5b5b6e","#bdbdc7","#ffffff","#111111"];
 const KINDS=["Álbum","Lightstick","Merch","Póster","Season's greetings","Otro"];
-const S={groups:[],items:[],sel:null,tab:"wish",color:COLORS[0],q:"",confirm:null,canWrite:false,ready:false,db:null,assets:null,uploading:null,sec:"merch",member:"",pcFile:null,pcPrev:null,pcBusy:false,pcTarget:null,editing:null,gedit:null,gcolor:null,media:[],anime:[],manga:[],shs:{media:{tab:"watching",type:"",plat:"",q:"",form:"movie"},anime:{tab:"watching",type:"",plat:"",q:"",form:"series"},manga:{tab:"watching",type:"",plat:"",q:"",form:"manga"}},meType:null,app:"home",games:[],gtab:"playing",plat:"",gq:""};
+const S={groups:[],items:[],sel:null,tab:"wish",color:COLORS[0],q:"",confirm:null,canWrite:false,ready:false,db:null,assets:null,uploading:null,sec:"merch",member:"",pcFile:null,pcPrev:null,pcBusy:false,pcTarget:null,editing:null,gedit:null,gcolor:null,media:[],anime:[],manga:[],books:[],shs:{media:{tab:"watching",type:"",plat:"",q:"",form:"movie"},anime:{tab:"watching",type:"",plat:"",q:"",form:"series"},manga:{tab:"watching",type:"",plat:"",q:"",form:"manga"},books:{tab:"watching",type:"",plat:"",q:"",form:"novel"}},meType:null,app:"home",games:[],gtab:"playing",plat:"",gq:""};
 try{const gt=localStorage.getItem("kp-gtab");if(gt==="pending"||gt==="playing"||gt==="done")S.gtab=gt;}catch(e){}
-const HASH={home:"#inicio",kpop:"#kpop",games:"#juegos",media:"#pelis",anime:"#anime",manga:"#manga"};
-const fromHash=h=>h==="#juegos"?"games":h==="#kpop"?"kpop":h==="#inicio"?"home":h==="#pelis"?"media":h==="#anime"?"anime":h==="#manga"?"manga":null;
+const HASH={home:"#inicio",kpop:"#kpop",games:"#juegos",media:"#pelis",anime:"#anime",manga:"#manga",books:"#libros"};
+const fromHash=h=>h==="#juegos"?"games":h==="#kpop"?"kpop":h==="#inicio"?"home":h==="#pelis"?"media":h==="#anime"?"anime":h==="#manga"?"manga":h==="#libros"?"books":null;
 S.app=fromHash(location.hash)||"home";
 function goApp(a){S.app=a;S.editing=null;S.confirm=null;S.plat="";clearPc();const h=HASH[a]||"#inicio";if(location.hash!==h){try{history.replaceState(null,"",h)}catch(e){location.hash=h}}$("#main").innerHTML="";render();try{window.scrollTo(0,0)}catch(e){}}
 window.addEventListener("hashchange",()=>{const a=fromHash(location.hash);if(a&&a!==S.app)goApp(a);});
@@ -500,7 +502,7 @@ async function replacePcPhoto(id,file){
   S.uploading="i:"+id;render();status("Subiendo foto…");
   try{let b;try{b=await shrink(file)}catch(_){b=file}
     const r=await S.assets.upload(b,{type:b.type||"image/jpeg"});
-    const col=["games","media","anime","manga"].find(k=>S[k].some(x=>x.id===id))||"items";
+    const col=["games","media","anime","manga","books"].find(k=>S[k].some(x=>x.id===id))||"items";
     const old=(S[col].find(x=>x.id===id)||{}).photo;
     await S.db.doc(col+"/"+id).update({photo:r.id});
     if(old&&old!==r.id)S.assets.delete(old).catch(()=>{});
@@ -607,7 +609,7 @@ const GST=[{k:"playing",l:"En progreso",ic:"▶"},{k:"pending",l:"Pendientes",ic
 const fdate=t=>t?new Date(t).toLocaleDateString("es-ES",{day:"numeric",month:"short",year:"numeric"}):"";
 function setChrome(){
   const g=S.app==="games",h=S.app==="home",C=SHELF[S.app];
-  $("#brandLabel").textContent=h?"K-pop · Juegos · Pelis · Anime · Manga":g?"Pendientes · En progreso · Terminados":C?C.label:"Álbumes · Photocards · Merch";
+  $("#brandLabel").textContent=h?"K-pop · Juegos · Pelis · Anime · Manga · Libros":g?"Pendientes · En progreso · Terminados":C?C.label:"Álbumes · Photocards · Merch";
   $("#brandTitle").innerHTML=h?'Mi Colección<span class="sticker">¡Hola!</span>':g?'Mis Juegos<span class="sticker">Gaming</span>':C?`${C.brand}<span class="sticker">${C.sticker}</span>`:'Mi Colección<span class="sticker">K-pop</span>';
   document.body.dataset.app=S.app;
   const solo=S.app!=="kpop";
@@ -712,7 +714,20 @@ const SHELF={
     empty:{done:"Aún no has terminado ningún manga",watching:"No estás leyendo nada ahora mismo",pending:"No tienes manga pendiente"},
     hintDone:"Cuando lo termines, pulsa «¡Leído!» y ponle nota.",hintAdd:"Añade un manga arriba con su portada y sus tomos.",
     homeNone:"Aún no has apuntado ningún manga.",homeNow:"Leyendo ahora",homeIdle:"No estás leyendo nada ahora mismo.",go:"Ir a mi manga →",
-    toastStart:"Movido a Leyendo 📖",toastDone:"¡Leído! Movido a Leídos ✅",last:"¡Último tomo!"}
+    toastStart:"Movido a Leyendo 📖",toastDone:"¡Leído! Movido a Leídos ✅",last:"¡Último tomo!"},
+  books:{col:"books",icon:"📕",h2:"Libros",brand:"Mis Libros",sticker:"Libros",color:"var(--books)",
+    st:{watching:{l:"Leyendo",one:"Leyendo",ic:"📖"},pending:{l:"Pendientes",one:"Pendiente",ic:"⏳"},done:{l:"Leídos",one:"Leído",ic:"✅"}},
+    types:[["novel","Novela","Novelas","novelas"],["nonfic","No ficción","No ficción","no ficción"],["comic","Cómic","Cómics","cómics"],["other","Otro","Otros","otros"]],defType:"novel",prog:()=>true,season:false,
+    plat:"Autor/a",platPh:"p. ej. Carlos Ruiz Zafón",list:"bookList",cur:"Página actual",tot:"Páginas totales",pre:"Pág. ",preTot:"Pág. ",plus:"+10 pág.",plusAria:"Sumar diez páginas",step:10,totPh:"p. ej. 350",
+    start:"📖 Empezar",doneBtn:"✅ ¡Leído!",again:"Volver a leer",poster:"Portada",
+    ph:()=>"p. ej. La sombra del viento",notesPh:"Editorial, saga, quién me lo recomendó…",
+    doneVerb:()=>"Terminaste",doneWhen:()=>"Terminado el ",startWhen:"Empezado el ",
+    label:"Pendientes · Leyendo · Leídos",search:"Buscar libro…",seen:"has leído",seenH:"Has leído",
+    intro:"Apunta los libros que estás leyendo, los que tienes pendientes y los que ya has terminado.",
+    empty:{done:"Aún no has terminado ningún libro",watching:"No estás leyendo ningún libro ahora mismo",pending:"No tienes libros pendientes"},
+    hintDone:"Cuando lo termines, pulsa «¡Leído!» y ponle nota.",hintAdd:"Añade un libro arriba con su portada y sus páginas.",
+    homeNone:"Aún no has apuntado ningún libro.",homeNow:"Leyendo ahora",homeIdle:"No estás leyendo ningún libro ahora mismo.",go:"Ir a mis libros →",
+    toastStart:"Movido a Leyendo 📖",toastDone:"¡Leído! Movido a Leídos ✅",last:"¡Última página!"}
 };
 const SKEYS=["watching","pending","done"];
 const typeL=(C,t)=>((C.types.find(x=>x[0]===t)||C.types.find(x=>x[0]===C.defType))||[,""])[1];
@@ -727,7 +742,7 @@ function shelfEdit(m,C){
     <label><span class="label">Tipo</span><select id="meType">${C.types.map(([k,l])=>`<option value="${k}"${k===t?" selected":""}>${l}</option>`).join("")}</select></label>
     <label><span class="label">${C.plat}</span><input type="text" id="mePlat" list="${C.list}" value="${esc(m.platform)}" maxlength="40"></label>
     <label><span class="label">Estado</span><select id="meStatus">${SKEYS.map(k=>`<option value="${k}"${k===m.status?" selected":""}>${C.st[k].one}</option>`).join("")}</select></label>
-    ${pr?`${C.season?`<label><span class="label">Temporada</span><input type="number" id="meSeason" min="1" value="${+m.season||""}" placeholder="1"></label>`:""}<label><span class="label">${C.cur}</span><input type="number" id="meEp" min="0" value="${m.episode!=null&&m.episode!==""?+m.episode:""}" placeholder="0"></label><label><span class="label">${C.tot}</span><input type="number" id="meEps" min="1" value="${+m.eps||""}" placeholder="p. ej. 11"></label>`:""}
+    ${pr?`${C.season?`<label><span class="label">Temporada</span><input type="number" id="meSeason" min="1" value="${+m.season||""}" placeholder="1"></label>`:""}<label><span class="label">${C.cur}</span><input type="number" id="meEp" min="0" value="${m.episode!=null&&m.episode!==""?+m.episode:""}" placeholder="0"></label><label><span class="label">${C.tot}</span><input type="number" id="meEps" min="1" value="${+m.eps||""}" placeholder="${C.totPh||"p. ej. 11"}"></label>`:""}
     <label><span class="label">Notas</span><input type="text" id="meNotes" value="${esc(m.notes)}" maxlength="200"></label>
     <div class="editacts"><button class="btn sm" type="submit">Guardar</button><button class="btn sm ghost" type="button" data-act="canceledit">Cancelar</button></div>
   </form>`;
@@ -783,7 +798,7 @@ function renderShelf(key){
           <label class="full"><span class="label">Título</span><input type="text" id="mTitle" placeholder="${C.ph(ft)}" maxlength="100" required></label>
           <label><span class="label">Tipo</span><select id="mType">${C.types.map(([k,l])=>`<option value="${k}"${k===ft?" selected":""}>${l}</option>`).join("")}</select></label>
           <label><span class="label">${C.plat}</span><input type="text" id="mPlat" list="${C.list}" placeholder="${C.platPh}" maxlength="40"></label>
-          ${pr?`${C.season?`<label><span class="label">Temporada</span><input type="number" id="mSeason" min="1" placeholder="1" inputmode="numeric"></label>`:""}<label><span class="label">${C.cur}</span><input type="number" id="mEp" min="0" placeholder="0" inputmode="numeric"></label><label class="${C.season?"full":""}"><span class="label">${C.tot}</span><input type="number" id="mEps" min="1" placeholder="p. ej. 11" inputmode="numeric"></label>`:""}
+          ${pr?`${C.season?`<label><span class="label">Temporada</span><input type="number" id="mSeason" min="1" placeholder="1" inputmode="numeric"></label>`:""}<label><span class="label">${C.cur}</span><input type="number" id="mEp" min="0" placeholder="0" inputmode="numeric"></label><label class="${C.season?"full":""}"><span class="label">${C.tot}</span><input type="number" id="mEps" min="1" placeholder="${C.totPh||"p. ej. 11"}" inputmode="numeric"></label>`:""}
           <label class="full"><span class="label">Notas</span><input type="text" id="mNotes" maxlength="200" placeholder="${C.notesPh}"></label>
           <button class="btn full" type="submit" ${S.pcBusy?"disabled":""}>${S.pcBusy?"Subiendo…":"Añadir a "+CS.l}</button>
         </div>
@@ -861,7 +876,7 @@ function renderHome(){
         <button class="btn" data-app="games" style="background:var(--play);box-shadow:0 6px 16px -8px var(--play);color:var(--surface)">Ir a mis juegos →</button>
       </div>
     </article>
-    ${["media","anime","manga"].map(k=>homeShelf(k,thumb)).join("")}
+    ${["media","anime","manga","books"].map(k=>homeShelf(k,thumb)).join("")}
   </div>
   <section class="recent"><h3>Actividad reciente</h3>${recent.length?`<ul>${recent.map(rRow).join("")}</ul>`:`<p class="meta" style="margin:8px 0 0;color:var(--muted)">Aquí verás lo último que añadas, consigas o termines.</p>`}</section>`);
 }
@@ -1017,7 +1032,7 @@ document.addEventListener("click",e=>{
   if(a==="gdone"){write(()=>db.doc("games/"+id).update({status:"done",finishedAt:Date.now()}));toast("¡Enhorabuena! Movido a Terminados 🏆");return;}
   if(a==="mstart"){const C=curShelf();if(!C)return;write(()=>db.doc(C.col+"/"+id).update({status:"watching",startedAt:Date.now()}));toast(C.toastStart);return;}
   if(a==="mdone"){const C=curShelf();if(!C)return;write(()=>db.doc(C.col+"/"+id).update({status:"done",finishedAt:Date.now()}));toast(C.toastDone);return;}
-  if(a==="mep"){const C=curShelf();if(!C)return;const m=S[C.col].find(x=>x.id===id);if(!m||epFull(m))return;const ne=(+m.episode||0)+1;const u={episode:ne};if(C.season)u.season=+m.season||1;write(()=>db.doc(C.col+"/"+id).update(u));if(+m.eps&&ne>=+m.eps)toast(`${C.last} ${ne}/${+m.eps} · Pulsa «${C.doneBtn.replace(/^\S+\s/,"")}» para terminarlo`);return;}
+  if(a==="mep"){const C=curShelf();if(!C)return;const m=S[C.col].find(x=>x.id===id);if(!m||epFull(m))return;const ne=Math.min(+m.eps||Infinity,(+m.episode||0)+(C.step||1));const u={episode:ne};if(C.season)u.season=+m.season||1;write(()=>db.doc(C.col+"/"+id).update(u));if(+m.eps&&ne>=+m.eps)toast(`${C.last} ${ne}/${+m.eps} · Pulsa «${C.doneBtn.replace(/^\S+\s/,"")}» para terminarlo`);return;}
 
   if(a==="mrate"){const C=curShelf();if(!C)return;const m=S[C.col].find(x=>x.id===id);const n=+b.dataset.r;write(()=>db.doc(C.col+"/"+id).update({rating:m&&+m.rating===n?0:n}));return;}
   if(a==="delmedia"){const C=curShelf();if(!C)return;S.confirm=null;const ph=(S[C.col].find(x=>x.id===id)||{}).photo;write(async()=>{await db.doc(C.col+"/"+id).delete();if(ph&&S.assets)S.assets.delete(ph).catch(()=>{});});return;}
@@ -1183,7 +1198,7 @@ render();syncThemeBtn();
   const done=()=>{if(got.g&&got.i){clearTimeout(timer);status("");}};
   const fail=()=>{clearTimeout(timer);status("Se perdió la conexión con la colección. Recarga la página.",true);};
   db.collection("groups").onSnapshot(s=>{S.groups=s.docs.map(d=>({id:d.id,...d.data()}));if(!s.metadata.fromCache){got.g=true;S.ready=true;done();}render();},fail);
-  ["media","anime","manga"].forEach(k=>db.collection(k).onSnapshot(s=>{S[k]=s.docs.map(d=>({id:d.id,...d.data()}));render();},fail));
+  ["media","anime","manga","books"].forEach(k=>db.collection(k).onSnapshot(s=>{S[k]=s.docs.map(d=>({id:d.id,...d.data()}));render();},fail));
   db.collection("games").onSnapshot(s=>{S.games=s.docs.map(d=>({id:d.id,...d.data()}));render();},fail);
   db.collection("items").onSnapshot(s=>{S.items=s.docs.map(d=>({id:d.id,...d.data()}));if(!s.metadata.fromCache){got.i=true;done();}render();},fail);
 })();
